@@ -1,0 +1,73 @@
+{
+  "easycom": {
+    "^u-(.*)": "@/uni_modules/uview-ui/components/u-$1/u-$1.vue"
+  },
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "云畅搜",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+	"tabBar": {
+		"color": "#cdcdcd",
+		"selectedColor": "#3385ff",
+		"backgroundColor": "#F8F8F8",
+		"list": [{
+			"pagePath": "pages/index/index",
+			"text": "营销",
+			"iconPath": "static/tabbar/home_fill.png",
+			"selectedIconPath": "static/tabbar/home_hl.png"
+		},{
+			"pagePath": "pages/promotion/index",
+			"text": "推广",
+			"iconPath": "static/tabbar/tg_fill.png",
+			"selectedIconPath": "static/tabbar/tg_hl.png"
+		},
+		{
+			"pagePath": "pages/customer/index",
+			"text": "客源管理",
+			"iconPath": "static/tabbar/ky_fill.png",
+			"selectedIconPath": "static/tabbar/ky_hl.png"
+		}, {
+			"pagePath": "pages/user/index",
+			"text": "我的",
+			"iconPath": "static/tabbar/user_fill.png",
+			"selectedIconPath": "static/tabbar/user_hl.png"
+		}]
+	},
+  "pages": [
+    {
+      "path": "pages/login/index",
+      "style": {
+				"app-plus": {  
+					"titleNView": false
+				} 
+			}
+    },
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "云畅搜"
+      }
+    },
+		{
+      "path": "pages/promotion/index",
+      "style": {
+        "navigationBarTitleText": "推广"
+      }
+    },
+		{
+      "path": "pages/customer/index",
+      "style": {
+        "navigationBarTitleText": "客源管理"
+      }
+    },
+		{
+      "path": "pages/user/index",
+      "style": {
+        "navigationBarTitleText": "我的"
+      }
+    }
+  ],
+  "uniIdRouter": {}
+}

@@ -1,0 +1,167 @@
+//高度、宽度拓展
+.w-full {
+    width: 100%;
+}
+.h-full {
+    height: 100%;
+}
+.w-screen {
+    width: 100vw;
+}
+.h-screen {
+    height: 100vh;
+}
+//flex
+.flex {
+    display: flex;
+}
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.flex-row {
+    flex-direction: row;
+}
+.flex-col {
+    flex-direction: column;
+}
+.flex-wrap {
+    flex-wrap: wrap;
+}
+.flex-nowrap {
+    flex-wrap: nowrap;
+}
+.items-start {
+    align-items: flex-start;
+}
+.items-end {
+    align-items: flex-end;
+}
+.items-center {
+    align-items: center;
+}
+.justify-start {
+    justify-content: flex-start;
+}
+.justify-end {
+    justify-content: flex-end;
+}
+.justify-center {
+    justify-content: center;
+}
+.justify-between {
+    justify-content: space-between;
+}
+.justify-around {
+    justify-content: space-around;
+}
+.justify-evenly {
+    justify-content: space-evenly;
+}
+.justify-items-start {
+    justify-items: start;
+}
+.justify-items-end {
+    justify-items: end;
+}
+.justify-items-center {
+    justify-items: center;
+}
+.justify-items-stretch {
+    justify-items: stretch;
+}
+.grow {
+    flex-grow: 1;
+}
+.shrink-0 {
+    flex-shrink: 0;
+}
+
+.static {
+    position: static;
+}
+.fixed {
+    position: fixed;
+}
+.absolute {
+    position: absolute;
+}
+.relative {
+    position: relative;
+}
+.sticky {
+    position: sticky;
+}
+// 元素类型
+.block {
+    display: block;
+}
+.inline-block {
+    display: inline-block;
+}
+.inline {
+    display: inline;
+}
+// 颜色bacground-color 、color
+.text-gray-900 {
+    color: #303133;
+}
+.text-gray-700 {
+    color: #606266;
+}
+.text-gray-500 {
+    color: #909193;
+}
+.text-gray-300 {
+    color: #c0c4cc
+}
+.text-white {
+    color: #fff;
+}
+.text-primary {
+    color: #3c9cff;
+}
+.bg-black {
+    background-color: #000;
+}
+.bg-white {
+    background-color: #fff;
+}
+.bg-primary {
+    background-color: #3c9cff;
+}
+.bg-warning {
+    background-color: #f9ae3d;
+}
+.bg-error {
+    background-color: #f56c6c;
+}
+.bg-info {
+    background-color: #909399;
+}
+.bg-success {
+    background-color: #5ac725;
+}
+.border-gray-300 {
+    border-color: #c0c4cc
+}
+.border-primary {
+    border-color: #3c9cff
+}
+// text拓展
+.text-left {
+    text-align: left;
+}
+.text-center {
+    text-align: center;
+}
+.text-right {
+    text-align: right;
+}
+.text-justify {
+    text-align: justify;
+}
+.text-bold {
+    font-weight: 700;
+}
