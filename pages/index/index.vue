@@ -9,7 +9,7 @@
 				<view>
 					<u-button 
 						icon="level" 
-						color="#fdd709" 
+						color="linear-gradient(0deg, #F0AF5B 0%, #F9DFAF 100%)" 
 						shape="circle"
 						icon-color="#613e10"
 						size="mini"
