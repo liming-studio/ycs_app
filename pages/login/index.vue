@@ -1,48 +1,33 @@
 <template>
-  <view class="h-screen py-30">
+  <view class="h-screen py-30 relative">
     <!-- logo -->
-    <view class="w-full h-200 flex-center text-3xl text-primary">云畅搜</view>
+    <view class="w-full h-250 flex-center text-3xl text-primary">云畅搜</view>
 		<!-- main -->
-		<view style="padding: 0 75rpx;">
-			<!-- tabs 
-			<view class="flex justify-center">
-				<u-tabs 
-					:list="tabList" 
-					:is-scroll="false" 
-					:current="current" 
-					class="mb-20"
-					@change="tabChange"
-				/>
-			</view>
-			-->
+		<view class="px-32">
 			<!-- form -->
 			<u-form>
 				<!-- 手机号 -->
 				<u-form-item>
 					<u-input
 						v-model="formData.phone"
+						type="number"
 						maxlength="11"
 						placeholder="请输入手机号"
 						border="bottom"
 						clearable
+						@change="changePhone"
 					/>
 				</u-form-item>
 				<!-- 密码 -->
 				<u-form-item v-show="formData.loginType">
 					<u-input
 						v-model="formData.password"
-						:password="!showPassword"
+						:password="true"
 						placeholder="请输入密码"
 						border="bottom"
 						clearable
-					>
-						<template slot="suffix">
-							<view class="p-1" @click="showPassword = !showPassword">
-								<u-icon v-if="!showPassword" name="eye" size="20"></u-icon>
-								<u-icon v-else name="eye-off" size="20"></u-icon>
-							</view>
-						</template>
-					</u-input>
+						@change="changePassword"
+					/>
 				</u-form-item>
 				<!-- 验证码 -->
 				<u-form-item v-show="!formData.loginType">
@@ -52,26 +37,28 @@
 						placeholder="请输入验证码"
 						border="bottom"
 						clearable
+						@change="changeCaptcha"
 					>
 						<template slot="suffix">
 							<u-code
 								ref="uCode"
 								@change="codeChange"
 								seconds="20"
-								changeText="X秒重新获取哈哈哈"
+								changeText="X秒重新获取"
 							/>
 							<u-button
 								type="primary"
 								size="mini"
+								shape="circle"
 								@tap="getCode"
 								:text="captchaBtnText"
 							/>
-					</template>
+					  </template>
 					</u-input>
 				</u-form-item>
 			</u-form>
-			<view class="flex items-center justify-between text-gray-300">
-				<view>忘记密码？</view>
+			<view class="flex items-center justify-between text-gray-500">
+				<view @click="toForgetPassword">忘记密码？</view>
 				<view @click="changeLoginType">
 					<text>{{ formData.loginType ? '使用短信验证码登录' : '使用密码登录' }}</text>
 				</view>
@@ -85,24 +72,27 @@
 				@click="submit"
 			/>
 			<view class="mt-10 text-center text-base">
-				<text class="text-gray-300">还没有账号？</text>
-				<text class="text-primary">立即注册</text>
+				<text class="text-gray-500">还没有账号？</text>
+				<text class="text-primary" @click="toRegister">立即注册</text>
 			</view>
-			<!-- 用户协议、隐私协议 -->
-			<view class="mt-20 flex-center">
-				<view
-					class="w-16 h-16 rounded-5xl border-1 border-gray-300 flex-center"
-					:class="{'bg-primary border-primary': checkAgreement}"
-					@click="checkAgreement = !checkAgreement"
-				>
-					<u-icon v-show="checkAgreement" name="checkbox-mark" color="#FFFFFF" size="12"></u-icon>
-				</view>
-				<view class="ml-4 text-sm">
-					<text class="text-gray-300">请您阅读并同意</text>
-					<text class="text-primary">《用户协议》</text>
-					<text class="text-gray-300">和</text>
-					<text class="text-primary">《隐私协议》</text>
-				</view>
+		</view>
+		<!-- 用户协议、隐私协议 -->
+		<view 
+			class="absolute w-full flex-center"
+			style="bottom: 50rpx"
+		>
+			<view
+				class="w-16 h-16 rounded-5xl border-1 border-gray-300 flex-center"
+				:class="{'bg-primary border-primary': checkAgreement}"
+				@click="checkAgreement = !checkAgreement"
+			>
+				<u-icon v-show="checkAgreement" name="checkbox-mark" color="#FFFFFF" size="12"></u-icon>
+			</view>
+			<view class="ml-4 text-sm">
+				<text class="text-gray-300">已阅读并同意</text>
+				<text class="text-primary">《用户协议》</text>
+				<text class="text-gray-300">和</text>
+				<text class="text-primary">《隐私协议》</text>
 			</view>
 		</view>
   </view>
@@ -111,28 +101,21 @@
 <script>
 import { validatePhone } from '@/utils/validate.js'
 import { Encrypt } from '@/utils/crypto.js'
+
 export default {
   data() {
     return {
 			formData: {
 				loginType: true,
-				// phone: uni.getStorageSync("phone") || '',
-				phone: '',
+				phone: uni.getStorageSync('phone') || '',
 				password: '',
         captcha: ''
 			},
-			showPassword: false,		// 是否显示密码
 			captchaBtnText: '',			// 验证码按钮文字
 			checkAgreement: false,	// 是否勾选协议
-			btnDisabled: false, 	  // 登录按钮禁用状态
-			/** tabs 
-				tabList: [{name: '账号登录'}, {name: '验证码登录'}],
-				current: 0,
-			**/
-    };
+			btnDisabled: true 	    // 登录按钮禁用状态
+    }
   },
-  mounted() {
-	},
   methods: {
 		// 切换登录状态
 		changeLoginType() {
@@ -140,9 +123,23 @@ export default {
 			if(this.formData.loginType) this.formData.captcha = ''
 			if(!this.formData.loginType) this.formData.password = ''
 		},
+		/** 输入变化改变按钮禁用状态 **/
+		changePhone(val) {
+			this.btnDisabled = this.formData.loginType ? !(this.formData.password && val) : !(this.formData.captcha && val)
+		},
+		changePassword(val) {
+			this.btnDisabled = !(this.formData.phone && val)
+		},
+		changeCaptcha(val) {
+			this.btnDisabled = !(this.formData.phone && val)
+		},
 		/******** 验证码相关 ********/
 		codeChange(text) {
-			this.captchaBtnText = text
+			if(text === '重新获取') {
+				this.captchaBtnText = '获取验证码'
+			} else {
+				this.captchaBtnText = text
+			}
 		},
 		getCode() {
 			// 拦截一些不合规的情况
@@ -164,21 +161,20 @@ export default {
 		},
 		/******** 登录相关 ********/
 		// 登录校验
-		validateLogin() {
-			if(this.formData.loginType && (!this.formData.phone || !this.formData.password)) { uni.$u.toast('输入信息不完整'); return }
-			if(!this.formData.loginType && (!this.formData.phone || !this.formData.captcha)) { uni.$u.toast('输入信息不完整'); return }
+		validateForm() {
 			if(!this.checkAgreement) { uni.$u.toast('请阅读并勾选协议'); return }
 			if(!validatePhone(this.formData.phone)) { uni.$u.toast('手机号格式不正确'); return }
 			return true
 		},
-		// 提交登录信息
+		// 提交信息
 		submit() {
-			if(this.validateLogin()) {
+			if(this.validateForm()) {
 				uni.showLoading({ title: '登录中' })
 				this.btnDisabled = true
 				this.login()
 			}
 		},
+		// 登录
 		async login() {
 			const res = await this.$api({ 
 				method: 'POST', 
@@ -199,6 +195,7 @@ export default {
 				// uni.setStorage({ key: 'phone', data: this.formData.phone })
 				uni.setStorage({ key: 'token', data: res.data.data.token })
 				uni.setStorage({ key: 'user', data: res.data.data.user })
+				uni.setStorage({ key: 'phone', data: res.data.data.phone })
 				setTimeout(() => {
 					uni.hideLoading()
 					uni.$u.toast('登录成功')
@@ -206,10 +203,18 @@ export default {
 					uni.switchTab({ url:"/pages/index/index"})
 				}, 200)
 			}
+		},
+		/** 跳转啊啊啊 **/
+		toForgetPassword() {
+			uni.navigateTo({
+				url: '/pages/login/forget'
+			})
+		},
+		toRegister() {
+			uni.navigateTo({
+				url: '/pages/login/register'
+			})
 		}
-		// tabChange(val) {
-		// 	this.current = val.index
-		// }
-	},
-};
+	}
+}
 </script>
