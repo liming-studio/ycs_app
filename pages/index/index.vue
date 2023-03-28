@@ -1,5 +1,5 @@
 <template>
-	<view class="w-full h-full relative">
+	<view class="w-full min-h-screen bg-gray-100 relative">
 		<view class="absolute w-full curved" />
 		<!-- content -->
 		<view class="pt-statusbar px-16 relative">
@@ -8,7 +8,7 @@
 				<view class="text-xl text-white">云畅搜</view>
 				<view>
 					<u-button 
-						icon="level" 
+						icon="level"
 						color="linear-gradient(0deg, #F0AF5B 0%, #F9DFAF 100%)" 
 						shape="circle"
 						icon-color="#613e10"
@@ -81,7 +81,7 @@
 } */
 .curved {
 	height: 32vh;
-	background-color: #027AFF;
+	background-color: #3c9cff;
 }
 .curved::after {
   content: '';
@@ -90,7 +90,7 @@
   position: absolute;
   bottom: 0;
   width: 100%;
-  background: #fff;
+  background: #f3f4f6;
   height: 20%;
 }
 .grid-text {
