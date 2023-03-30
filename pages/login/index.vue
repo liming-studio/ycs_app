@@ -1,7 +1,10 @@
 <template>
   <view class="h-screen py-30 relative">
     <!-- logo -->
-    <view class="w-full h-250 flex-center text-3xl text-primary">云畅搜</view>
+    <view class="w-full h-250 flex-center">
+			<image src="/static/logo.png" class="w-85 h-85" />
+			<view class="text-3xl text-primary">云畅搜</view>
+		</view>
 		<!-- main -->
 		<view class="px-32">
 			<!-- form -->
