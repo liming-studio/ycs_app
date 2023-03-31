@@ -1,5 +1,5 @@
 <template>
-	<view class="w-full min-h-screen bg-gray-100 relative">
+	<view class="w-full min-h-screen bg-gray-100 pb-32 relative">
 		<view class="absolute w-full">
 			<view class="bg-top-1" />
 			<view class="bg-top-2" />
@@ -46,8 +46,8 @@
 				</u-grid-item>
 			</u-grid>
 			<!-- kingkogn2 -->
-			<view class="mt-8 w-full h-140 bg-white rounded-lg flex items-center p-12">
-				<view class="shrink-0 w-140 h-full rounded bg-gray-100 rounded-sm"></view>
+			<view class="mt-8 w-full h-160 bg-white rounded-lg flex items-center p-12">
+				<view class="shrink-0 w-150 h-full rounded bg-gray-100 rounded-sm"></view>
 				<view class="ml-8 grow w-full h-full flex flex-col">
 					<view class="w-full h-full bg-gray-100 rounded-sm"></view>
 					<view class="mt-8 w-full h-full bg-gray-100 rounded-sm"></view>
@@ -56,6 +56,29 @@
 			<!-- banner -->
 			<view class="mt-12">
 				<u-swiper :list="bannerList" circular indicator height="80" />
+			</view>
+			<!-- list -->
+			<view class="mt-12">
+				<!-- list -->
+				<view class="flex items-center h-32">
+					<view class="w-4 h-16 rounded-lg bg-primary" />
+					<view class="ml-8 text-xl font-bold">热门推荐</view>
+				</view>
+				<base-pagination 
+					ref="paginationRef" 
+					url="/open/tuiguang/getPage" 
+					:ask="true"
+					:params="params" 
+					:loading="false"
+				>
+					<template v-slot="{list}">
+						<view class="flex flex-wrap justify-between" style="padding: 0 20rpx">
+							<view v-for="(item, index) in list" :key="index">
+								{{ list }}
+							</view>
+						</view>
+					</template>
+				</base-pagination>
 			</view>
 		</view>
 			<!-- swiper -->
@@ -79,23 +102,31 @@
 				</u-grid>
 			</view> -->
 		</view>
-	</view>
 </template>
 
 <script>
+	import BasePagination from '@/components/BasePagination.vue'
 	export default {
+		components: {
+			BasePagination
+		},
 		data() {
 			return {
 				bannerList: [
 					'https://cdn.uviewui.com/uview/swiper/swiper2.png',
 					'https://cdn.uviewui.com/uview/swiper/swiper3.png',
 				],
-				kingkongList: []
+				kingkongList: [],
+				params: {}
 			}
 		},
 		onLoad() {
-			this.getBannerList()
-			this.getKingKong()
+			// this.getBannerList()
+			// this.getKingKong()
+		},
+		onReachBottom() {
+			console.log('aa')
+			this.$refs.paginationRef.addPage()
 		},
 		methods: {
 			// async getBannerList() {
