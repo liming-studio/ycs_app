@@ -1,16 +1,17 @@
 <template>
 	<view class="w-full min-h-screen bg-gray-100 pb-32 relative">
+		<!-- 头部背景 -->
 		<view class="absolute w-full">
 			<view class="bg-top-1" />
 			<view class="bg-top-2" />
 		</view>
-		<!-- content -->
-		<view class="pt-statusbar px-16 relative">
-			<!-- title -->
-			<view class="flex items-center justify-between py-12">
+		<!-- main -->
+		<view class="pt-statusbar relative">
+			<!-- header -->
+			<view class="flex items-center justify-between py-12 px-16">
 				<view class="text-xl text-white">云畅搜</view>
 				<view>
-					<u-button 
+					<u-button
 						icon="level"
 						color="linear-gradient(0deg, #F0AF5B 0%, #F9DFAF 100%)" 
 						shape="circle"
@@ -21,64 +22,118 @@
 					</u-button>
 				</view>
 			</view>
-			<!-- search -->
-			<view class="w-full h-42 rounded-2xl bg-white flex items-center px-14">
-				<u-icon name="search" size="24" color="#909193" />
-				<view class="ml-8 text-gray-300 text-lg">查公司</view>
-			</view>
-			<!-- kingkong -->
-			<u-grid  :border="false" col="4" class="mt-12">
-				<u-grid-item>
-					<image src="/static/kingkong/target-icon.png" class="w-40 h-40" />
-					<text class="grid-text">精准拓客</text>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/kingkong/location-icon.png" class="w-40 h-40" />
-					<text class="grid-text">附近拓客</text>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/kingkong/suitcase-icon.png" class="w-40 h-40" />
-					<text class="grid-text">企查拓客</text>
-				</u-grid-item>
-				<u-grid-item>
-					<image src="/static/kingkong/man-icon.png" class="w-50 h-40" />
-					<text class="grid-text">电子名片</text>
-				</u-grid-item>
-			</u-grid>
-			<!-- kingkogn2 -->
-			<view class="mt-8 w-full h-160 bg-white rounded-lg flex items-center p-12">
-				<view class="shrink-0 w-150 h-full rounded bg-gray-100 rounded-sm"></view>
-				<view class="ml-8 grow w-full h-full flex flex-col">
-					<view class="w-full h-full bg-gray-100 rounded-sm"></view>
-					<view class="mt-8 w-full h-full bg-gray-100 rounded-sm"></view>
+			<view 
+				v-show="showStickySearch" 
+				class="sticky top-0 z-50 pt-statusbar bg-gray-100"
+			>
+				<view class="py-12 px-16">
+					<navigator url="/pages/search/index" hover-class="none">
+						<view class="w-full h-36 rounded-2xl bg-white flex items-center px-14">
+							<u-icon name="search" size="24" color="#909193" />
+							<view class="ml-8 text-gray-300">请输入关键词</view>
+						</view>
+					</navigator>
 				</view>
 			</view>
-			<!-- banner -->
-			<view class="mt-12">
-				<u-swiper :list="bannerList" circular indicator height="80" />
-			</view>
-			<!-- list -->
-			<view class="mt-12">
-				<!-- list -->
-				<view class="flex items-center h-32">
-					<view class="w-4 h-16 rounded-lg bg-primary" />
-					<view class="ml-8 text-xl font-bold">热门推荐</view>
-				</view>
-				<base-pagination 
-					ref="paginationRef" 
-					url="/open/tuiguang/getPage" 
-					:ask="true"
-					:params="params" 
-					:loading="false"
-				>
-					<template v-slot="{list}">
-						<view class="flex flex-wrap justify-between" style="padding: 0 20rpx">
-							<view v-for="(item, index) in list" :key="index">
-								{{ list }}
+
+			<!-- content -->
+			<view class="px-16 relative">
+				<!-- search -->
+				<navigator url="/pages/search/index" hover-class="none">
+					<view class="w-full h-42 rounded-2xl bg-white flex items-center px-14">
+						<u-icon name="search" size="24" color="#909193" />
+						<view class="ml-8 text-gray-300">请输入关键词</view>
+					</view>
+				</navigator>
+				<!-- kingkong -->
+				<u-grid  :border="false" col="4" class="mt-12">
+					<u-grid-item>
+						<image src="/static/kingkong/target-icon.png" class="w-40 h-40" />
+						<text class="grid-text">精准拓客</text>
+					</u-grid-item>
+					<u-grid-item>
+						<image src="/static/kingkong/location-icon.png" class="w-40 h-40" />
+						<text class="grid-text">附近拓客</text>
+					</u-grid-item>
+					<u-grid-item>
+						<image src="/static/kingkong/suitcase-icon.png" class="w-40 h-40" />
+						<text class="grid-text">企查拓客</text>
+					</u-grid-item>
+					<u-grid-item>
+						<image src="/static/kingkong/man-icon.png" class="w-50 h-40" />
+						<text class="grid-text">电子名片</text>
+					</u-grid-item>
+				</u-grid>
+				<!-- kingkogn2 --> 
+				<view class="mt-8 w-full h-160 bg-white rounded-lg flex items-center p-12">
+					<!-- 附近拓客 -->
+					<view class="shrink-0 w-160 h-full rounded-sm relative">
+						<view class="absolute inset-0 z-10 rounded-sm bg-primary bg-linear-near p-12">
+							<view class="text-lg text-sky-600">附近拓客</view>
+							<view class="text-xs opacity-80">了解附近10km企业</view>
+							<view class="mt-12 w-60">
+								<u-button 
+									size="mini" 
+									color="linear-gradient(to right, rgb(251,167,50), rgb(251,183,92))" 
+									text="去看看>" 
+									shape="circle" 
+								/>
 							</view>
 						</view>
-					</template>
-				</base-pagination>
+						<view class="w-155 h-136 rounded-sm overflow-hidden">
+							<u-image src="/static/kingkong/near-icon.jpeg" width="320rpx" height="272rpx" />
+						</view>
+					</view>
+					<view class="ml-8 grow w-full h-full flex flex-col">
+						<!-- 企业查询 -->
+						<view class="w-full h-full bg-gray-100 rounded-sm relative">
+							<view class="absolute inset-0 z-10 rounded-sm bg-primary bg-linear-near px-12 py-8">
+								<view class="text-lg text-sky-600">企业查询</view>
+								<view class="text-xs opacity-80">互联网/财税/物流</view>
+							</view>
+							<view class="w-full h-136 rounded-sm overflow-hidden text-right">
+								<u-image src="/static/kingkong/business-icon.jpeg" width="308rpx" height="130rpx" radius="8" />
+							</view>
+						</view>
+						<!-- 精准拓客 -->
+						<view class="mt-8 w-full h-full bg-gray-100 rounded-sm relative">
+							<view class="absolute inset-0 z-10 rounded-sm bg-primary bg-linear-near px-12 py-8">
+								<view class="text-lg text-sky-600">精准搜索</view>
+								<view class="text-xs opacity-80">根据条件精准查询</view>
+							</view>
+							<view class="w-full h-136 rounded-sm overflow-hidden text-right">
+								<u-image src="/static/kingkong/precision-icon.jpeg" width="308rpx" height="130rpx" radius="8" />
+							</view>
+						</view>
+					</view>
+				</view>
+				<!-- banner -->
+				<view class="mt-12">
+					<u-swiper :list="bannerList" circular indicator height="80" />
+				</view>
+				<!-- list -->
+				<view class="mt-12">
+					<!-- list -->
+					<view class="flex items-center h-32">
+						<view class="w-4 h-16 rounded-lg bg-primary" />
+						<view class="ml-8 text-xl font-bold">热门推荐</view>
+					</view>
+					<base-pagination 
+						ref="paginationRef" 
+						url="/open/tuiguang/getPage" 
+						:ask="true"
+						:params="params" 
+						:loading="false"
+					>
+						<template v-slot="{list}">
+							<view class="flex flex-wrap justify-between" style="padding: 0 20rpx">
+								<view v-for="(item, index) in list" :key="index">
+									{{ list }}
+								</view>
+							</view>
+						</template>
+					</base-pagination>
+				</view>
 			</view>
 		</view>
 			<!-- swiper -->
@@ -117,16 +172,21 @@
 					'https://cdn.uviewui.com/uview/swiper/swiper3.png',
 				],
 				kingkongList: [],
-				params: {}
+				params: {},
+				showStickySearch: false
 			}
 		},
-		onLoad() {
-			// this.getBannerList()
-			// this.getKingKong()
+		onPageScroll(e) {
+			// 是否显示置顶搜索框
+			this.showStickySearch = e.scrollTop > 150
 		},
 		onReachBottom() {
 			console.log('aa')
 			this.$refs.paginationRef.addPage()
+		},
+		onLoad() {
+			// this.getBannerList()
+			// this.getKingKong()
 		},
 		methods: {
 			// async getBannerList() {
@@ -166,5 +226,14 @@
 	/* #ifndef APP-PLUS */
 	box-sizing: border-box;
 	/* #endif */
+}
+.bg-linear-near {
+	background: linear-gradient(120deg, rgba(255,255,255,0.9) 0%, rgba(130,189,250,0.5) 100%);
+}
+.bg-linear-bussiness {
+	background: linear-gradient(120deg, rgba(255,255,255,0.9) 0%, rgba(249,115,22,0.5) 100%);
+}
+.bg-linear-precision {
+	background: linear-gradient(120deg, rgba(255,255,255,0.9) 0%, rgba(79,70,229,0.5) 100%);
 }
 </style>

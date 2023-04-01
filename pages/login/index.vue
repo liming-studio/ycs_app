@@ -3,7 +3,7 @@
     <!-- logo -->
     <view class="w-full h-300 flex-center">
 			<image src="/static/logo.png" class="w-70 h-70" />
-			<view class="text-3xl text-primary" style=" margin-top:-2px">云畅搜</view>
+			<view class="text-3xl text-primary" style=" margin-top:-4px">云畅搜</view>
 		</view>
 		<!-- main -->
 		<view class="px-32">

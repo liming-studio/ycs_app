@@ -86,7 +86,12 @@
 .shrink-0 {
     flex-shrink: 0;
 }
-
+.object-cover {
+    object-fit: cover;
+}
+.object-center {
+    object-position: center;
+}
 .static {
     position: static;
 }
@@ -104,6 +109,12 @@
 }
 .bottom-0 {
     bottom: 0px;
+}
+.top-0 {
+    top: 0px;
+}
+.inset-0 {
+    inset: 0px;
 }
 // 元素类型
 .block {
@@ -133,6 +144,15 @@
 }
 .text-primary {
     color: #3c9cff; 
+}
+.text-sky-600 {
+    color: #0284c7;
+}
+.text-orange-600 {
+    color: #ea580c;
+}
+.text-indgo-600 {
+    color: #4f46e5;
 }
 .bg-black {
     background-color: #000;
@@ -164,6 +184,11 @@
 .border-primary {
     border-color: #3c9cff
 }
+
+.opacity-80 {
+    opacity: 0.8;
+}
+
 // text拓展
 .text-left {
     text-align: left;
@@ -197,4 +222,7 @@
 }
 .z-50 {
     z-index: 50; 
+}
+.overflow-hidden {
+    overflow: hidden
 }
