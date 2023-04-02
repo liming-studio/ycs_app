@@ -5,42 +5,51 @@
       <u-search 
         placeholder="请输入关键字" 
         v-model="keyword"
-        shape="square"
         actionText="取消"
         @custom="cancel"
         />
     </view>
     <!-- 最近搜索 -->
     <view class="mt-12 px-16">
-      <view>最近搜索</view>
-      <view class="mt-4 flex flex-wrap">
+      <view class="flex items-center justify-between">
+        <view>最近搜索</view>
+        <view class="px-2">
+          <u-icon name="trash" color="#909193" size="20"></u-icon>
+        </view>
+      </view>
+      <view class="mt-8 py-4 flex flex-wrap">
         <u-tag 
           v-for="tag in historyTags"
           :key="tag.id"
           :text="tag.text" 
-          size="mini" 
-          closable 
+          size="mini"
           bgColor="#f3f4f6"
           borderColor="#f3f4f6"
           color="#909193"
-          :show="tag.show" 
+          :show="tag.show"
+          class="mr-8 mb-8"
         />
       </view>
     </view>
     <!-- 热门搜索 -->
     <view class="mt-32 px-16">
-      <view>热门搜索</view>
-      <view class="mt-4 flex flex-wrap">
+      <view class="flex items-center justify-between">
+        <view>热门搜索</view>
+        <view class="px-2">
+          <u-icon name="trash" color="#909193" size="20"></u-icon>
+        </view>
+      </view>
+      <view class="mt-8 py-4 flex flex-wrap">
         <u-tag 
           v-for="tag in hotTags"
           :key="tag.id"
           :text="tag.text" 
           size="mini" 
-          closable 
           bgColor="#f3f4f6"
           borderColor="#f3f4f6"
           color="#909193"
-          :show="tag.show" 
+          :show="tag.show"
+          class="mr-8 mb-8"
         />
       </view>
     </view>

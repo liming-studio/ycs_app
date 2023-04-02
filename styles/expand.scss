@@ -4,6 +4,9 @@
 .pt-statusbar {
     padding-top: var(--status-bar-height)
 }
+.top-navbar {
+    top: calc(var(--status-bar-height) + 44px)
+}
 //高度、宽度拓展
 .w-full {
     width: 100%;
@@ -139,6 +142,9 @@
 .text-gray-300 {
     color: #c0c4cc
 }
+.text-gray-100 {
+    color: #f3f4f6
+}
 .text-white {
     color: #fff;
 }
@@ -202,21 +208,18 @@
 .text-justify {
     text-align: justify;
 }
-.text-bold {
+.font-bold {
     font-weight: 700;
 }
 .z-10 {
     z-index: 10; 
 }
-
 .z-20 {
     z-index: 20; 
 }
-
 .z-30 {
     z-index: 30; 
 }
-
 .z-40 {
     z-index: 40; 
 }
@@ -225,4 +228,28 @@
 }
 .overflow-hidden {
     overflow: hidden
+}
+.line-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    word-break: break-all;
+}
+.line-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    word-break: break-all;
+}
+.line-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    word-break: break-all;
+}
+.ml-auto {
+    margin-left: auto;
 }

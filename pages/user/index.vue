@@ -1,6 +1,6 @@
 <template>
 	<view>
-    user
+    我的
 	</view>
 </template>
 

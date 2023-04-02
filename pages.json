@@ -67,7 +67,7 @@
     {
       "path": "pages/index/index",
       "style": {
-				"app-plus": {  
+				"app-plus": {
 					"titleNView": false,
 					"bounce": "none"
 				} 
@@ -76,13 +76,29 @@
 		{
       "path": "pages/promotion/index",
       "style": {
-        "navigationBarTitleText": "推广"
+				"app-plus": {
+					"titleNView": false,
+					"bounce": "none"
+				} 
+			}
+    },
+		{
+      "path": "pages/promotion/add",
+      "style": {
+        "navigationBarTitleText": "发布推广",
+        "app-plus": {
+					"bounce": "none"
+				} 
       }
     },
 		{
       "path": "pages/customer/index",
       "style": {
-        "navigationBarTitleText": "客源管理"
+        "navigationBarTitleText": "客源管理",
+        "app-plus": {
+					"titleNView": false,
+					"bounce": "none"
+				} 
       }
     },
 		{
@@ -99,6 +115,36 @@
 					"bounce": "none"
 				} 
 			}
+    },
+		{
+      "path": "pages/precise/index",
+      "style": {
+        "navigationBarTitleText": "精准拓客"
+      }
+    },
+		{
+      "path": "pages/near/index",
+      "style": {
+        "navigationBarTitleText": "附近拓客"
+      }
+    },
+		{
+      "path": "pages/company/index",
+      "style": {
+        "navigationBarTitleText": "企查拓客"
+      }
+    },
+		{
+      "path": "pages/ecard/index",
+      "style": {
+        "navigationBarTitleText": "电子名片"
+      }
+    },
+		{
+      "path": "pages/vip/index",
+      "style": {
+        "navigationBarTitleText": "vip会员"
+      }
     }
   ],
   "uniIdRouter": {}

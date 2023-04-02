@@ -1,16 +1,15 @@
 const BASE_URL = 'https://www.jnysqc.com/'
 
- export const api = (options) => {
- 	const header_tmp = {
- 		"Authorization": uni.getStorageSync("token"),
- 		'Content-Type': options.contentType || 'application/json'
- 	}
+export const api = (options) => {
  	return new Promise((resolve, reject) => {
  		uni.request({
  			url: BASE_URL + options.url,
  			method: options.method || 'GET',
  			data: options.data || {},
- 			header: header_tmp,
+ 			header: {
+				"Authorization": uni.getStorageSync("token"),
+ 				'Content-Type': options.contentType || 'application/json'
+			},
  			success: (res) => {
  				if (res.data.code === 20002) {
           uni.clearStorageSync()
@@ -33,4 +32,39 @@ const BASE_URL = 'https://www.jnysqc.com/'
  			}
  		})
  	})
- }
+}
+
+// 必须是post请求
+export const upload = (options) => {
+	return new Promise((resolve, reject) => {
+		uni.uploadFile({
+			url: BASE_URL + options.url,
+			filePath: options.filePath,
+			name: 'file',
+			header: {
+			 "Authorization": uni.getStorageSync("token"),
+			// 'Content-Type': options.contentType || 'application/json'
+		 },
+			success: (res) => {
+				if (res.data.code === 20002) {
+				 uni.clearStorageSync()
+					uni.showModal({
+						title: '登录时效已过期，请重新登录',
+						icon: 'fail',
+						showCancel: false,
+						success: () => {
+							uni.navigateTo({
+								url: '/pages/login/login'
+							})
+						}
+					})
+				} else {
+					resolve(res)
+				}
+			},
+			fail: (err) => {
+				reject(err)
+			}
+		})
+	})
+}
