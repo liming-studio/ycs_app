@@ -74,7 +74,6 @@
 				if(!more) this.localList = res.data.data.records
 				console.log(res.data.data.current * res.data.data.size, res.data.data.total)
 				if (res.data.data.current * res.data.data.size >= res.data.data.total) {
-					alert('a')
 					this.finished = true
 				}
 				this.showLoading = false

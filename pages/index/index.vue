@@ -223,7 +223,7 @@
 											<u-avatar :src="item.userthumbnail" size="20" />
 										</view>
 										<view class="ml-6 text-gray-700 line-1 text-sm">{{ item.companyname }}</view>
-										<view class="ml-auto text-xs text-gray-500">{{ item.looknum }}浏览</view>
+										<view class="ml-auto text-xs text-gray-500">{{ item.looknum }}人浏览</view>
 									</view>
 								</view>
 							</navigator>

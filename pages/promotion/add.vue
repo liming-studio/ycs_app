@@ -57,6 +57,9 @@
         />
 			</u-form-item>
     </u-form>
+    <view class="mt-48">
+      <u-button type="primary" shape="circle"  @click="submit">提交</u-button>
+    </view>
   </view>
 </template>
 
@@ -75,7 +78,12 @@ export default {
         content: ''         // 详细描述
       },
       rules: {
-
+        'companyname': {
+          type: 'string',
+					required: true,
+					message: '请填写公司名称',
+					trigger: ['blur', 'change']
+        }
       }
     }
   },
@@ -83,9 +91,7 @@ export default {
     // 删除图片
     deletePic(event) {
       this[`fileList${event.name}`].splice(event.index, 1)
-      // this[`form.images${event.name}`].splice(event.index, 1)
     },
-    // 新增图片 https://www.jnysqc.com/open/addpic
 		afterRead(event) {
       let lists = [].concat(event.file)
       let fileListLen = this[`fileList${event.name}`].length
@@ -108,30 +114,16 @@ export default {
       }
     },
     async uploadFilePromise(path) {
-      const res = await this.$upload({url: 'open/addpic', filePath: path})
+      const res = await this.$upload({url: '/open/addpic', filePath: path})
       console.log(res)
-    }
-    // uploadFilePromise(url) {
-    //   return new Promise((resolve, reject) => {
-    //     let a = uni.uploadFile({
-    //       url: 'https://www.jnysqc.com/open/addpic',
-    //       filePath: url,
-    //       name: 'file',
-    //       header: {
-    //         "Authorization": uni.getStorageSync("token"),
- 		//         'Content-Type': 'application/json'
-    //       },
-    //       formData: {
-    //         user: 'test'
-    //       },
-    //       success: (res) => {
-    //         setTimeout(() => {
-    //           resolve(res.data.data)
-    //         }, 1000)
-    //       }
-    //     });
-    //   })
-    // }
+    },
+    submit() {
+			this.$refs.uForm.validate().then(res => {
+				uni.$u.toast('校验通过')
+			}).catch(errors => {
+				uni.$u.toast('校验失败')
+			})
+		}
   }
 }
 </script>

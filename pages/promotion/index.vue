@@ -102,7 +102,7 @@
 								<view class="mt-12 flex items-center">
 									<u-icon name="tags" color="#909193" />
 									<view class="ml-4 text-sm text-gray-500">{{ item.industryname }}</view>
-									<view class="ml-auto text-sm text-gray-500">{{ item.looknum }}浏览</view>
+									<view class="ml-auto text-sm text-gray-500">{{ item.looknum }}人浏览</view>
 								</view>
 							</view>
 						</view>
@@ -169,7 +169,7 @@
 								<view class="mt-12 flex items-center">
 									<u-icon name="tags" color="#909193" />
 									<view class="ml-4 text-sm text-gray-500">{{ item.industryname }}</view>
-									<view class="ml-auto text-sm text-gray-500">{{ item.looknum }}浏览</view>
+									<view class="ml-auto text-sm text-gray-500">{{ item.looknum }}人浏览</view>
 								</view>
 							</view>
 						</view>

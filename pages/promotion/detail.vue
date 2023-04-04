@@ -41,10 +41,8 @@
         <view class="mt-20 text-xl font-bold">{{ message.title }}</view>
         <view class="mt-8 text-sm">
           <text class="text-gray-500">{{ message.inserttime }}</text>
-          <text class="text-gray-300 px-2">｜</text>
-          <text class="text-gray-500">{{ message.level }}</text>
-          <text class="text-gray-300 px-2">｜</text>
-          <text class="text-gray-500">{{ message.looknum }}浏览</text>
+          <text class="text-gray-300 px-2 text-xs">｜</text>
+          <text class="text-gray-500">{{ message.looknum }}人浏览</text>
         </view>
         <view class="mt-24">{{ message.content }}</view>
         <view class="mt-24">
