@@ -1,13 +1,12 @@
 <template>
   <view class="pt-statusbar relative">
     <!-- 搜索框部分 -->
-    <view class="py-12 px-16">
+    <view class="py-12 px-16 flex items-center">
+      <u-icon name="arrow-left" class="px-2 mr-8" />
       <u-search 
         placeholder="请输入关键字" 
         v-model="keyword"
-        actionText="取消"
-        @custom="cancel"
-        />
+      />
     </view>
     <!-- 最近搜索 -->
     <view class="mt-12 px-16">
@@ -55,7 +54,6 @@
     </view>
   </view>
 </template>
-
 <script>
 	export default {
 		data() {
