@@ -91,6 +91,15 @@
 				} 
       }
     },
+    {
+      "path": "pages/promotion/detail",
+      "style": {
+        "navigationBarTitleText": "详情",
+        "app-plus": {
+					"bounce": "none"
+				} 
+      }
+    },
 		{
       "path": "pages/customer/index",
       "style": {

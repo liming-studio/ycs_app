@@ -2,10 +2,15 @@
   <view class="pt-statusbar relative">
     <!-- 搜索框部分 -->
     <view class="py-12 px-16 flex items-center">
-      <u-icon name="arrow-left" class="px-2 mr-8" />
+      <view class="px-2 mr-8" @click="back">
+        <u-icon name="arrow-left" size="20" />
+      </view>
       <u-search 
-        placeholder="请输入关键字" 
+        placeholder="请输入关键字"
+        showAction
         v-model="keyword"
+        @search="toSearch"
+        @custom="toSearch"
       />
     </view>
     <!-- 最近搜索 -->
@@ -76,8 +81,11 @@
 			}
 		},
     methods: {
-      cancel() {
+      back() {
         uni.navigateBack()
+      },
+      toSearch(value) {
+        alert(value)
       }
     }
 	}

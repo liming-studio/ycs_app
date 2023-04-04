@@ -1,8 +1,9 @@
 <template>
 	<view class="w-full pt-navbar relative">
 		<u-navbar
-			left-icon="search"
+			:left-icon="active === 1 ? 'search' : ''"
 			leftIconSize="28"
+			@leftClick="toSearch"
 		>
 			<view slot="center">
 				<div class="flex items-center">
@@ -41,115 +42,156 @@
 					:list="tabs"
 					activeStyle="font-size: 32rpx; font-weight: 700; color: #303133"
 					inactiveStyle="color: #909193"
+					@change="changeTabs"
 				/>
 			</view>
-			<view 
-				v-for="i in 10" 
-				:key="i"
+			<base-pagination 
+				ref="paginationRef" 
+				url="/open/tuiguang/getPage" 
+				:ask="true"
+				:params="params" 
+				:loading="false"
 			>
-				<view class="p-16">
-					<view class="flex items-center">
-						<view class="shrink-0 w-36 h-36 rounded-xs">
-							<u-image src="https://cdn.pixabay.com/photo/2021/11/12/03/04/woman-6787784__340.png" width="72rpx" height="72rpx" radius="8" />
-						</view>
-						<view class="ml-10 grow">
-							<view class="flex items-center justify-between">
-								<view class="text-base">{{ testObj.companyname }}</view>
-								<view class="px-6 py-1 bg-error text-white text-xs rounded-xs">置顶</view>
+				<template v-slot="{list}">
+					<navigator 
+						v-for="(item, index) in list"
+						:key="index"
+						:url="'/pages/promotion/detail?id='+item.id" 
+						hover-class="none"
+					>
+						<view class="p-16">
+							<view class="flex items-center">
+								<view class="shrink-0 w-36 h-36 rounded-xs">
+									<u-avatar :src="item.userthumbnail" size="36" />
+								</view>
+								<view class="ml-10 grow">
+									<view class="flex items-center justify-between">
+										<view class="text-base">{{ item.companyname }}</view>
+										<view 
+											v-if="item.level"
+											class="px-6 py-1 bg-error text-white text-xs rounded-xs"
+										>
+											{{ item.level }}
+										</view>
+									</view>
+									<view class="text-xs text-gray-500">{{ item.inserttime }}</view>
+								</view>
 							</view>
-							<view class="text-xs text-gray-500">2023-04-13 09:18:12</view>
-						</view>
-					</view>
-					<view class="mt-8">
-						<view class="line-2 text-lg font-bold">{{ testObj.title }}</view>
-						<view class="mt-8 text-base text-gray-700 line-3">{{ testObj.contact }}</view>
-						<view class="mt-8 flex justify-between">
-							<view 
-								v-for="(img, index) in testObj.images"
-								:key="index"
-								class="w-110 h-110 rounded-xs"
-							>
-								<u-image 
-									:src="img" 
-									width="220rpx" 
-									height="220rpx" 
-									radius="6" 
-									:lazy-load="true"
-								>
-									<template v-slot:loading>
-										<u-loading-icon />
-									</template>
-								</u-image>
+							<view class="mt-8">
+								<view class="line-2 text-lg font-bold">{{ item.title }}</view>
+								<view class="mt-8 text-base text-gray-700 line-3">{{ item.content }}</view>
+								<view class="mt-8 flex">
+									<view 
+										v-for="(img, index) in JSON.parse(item.images)"
+										:key="index"
+										class="w-110 h-110 rounded-xs mr-8"
+									>
+										<u-image 
+											:src="img" 
+											width="220rpx" 
+											height="220rpx" 
+											radius="6"
+											:lazy-load="true"
+										>
+											<template v-slot:loading>
+												<u-loading-icon />
+											</template>
+										</u-image>
+									</view>
+								</view>
+								<view class="mt-12 flex items-center">
+									<u-icon name="tags" color="#909193" />
+									<view class="ml-4 text-sm text-gray-500">{{ item.industryname }}</view>
+									<view class="ml-auto text-sm text-gray-500">{{ item.looknum }}浏览</view>
+								</view>
 							</view>
 						</view>
-						<view class="mt-12 flex items-center">
-							<u-icon name="tags" color="#909193" />
-							<view class="ml-4 text-sm text-gray-500">糖酒食品</view>
-							<view class="ml-auto text-sm text-gray-500">2399人浏览</view>
-						</view>
-					</view>
-				</view>
-				<u-line color="#e5e7eb" />
-			</view>
+						<u-line color="#e5e7eb" />
+					</navigator>
+				</template>
+			</base-pagination>
 		</view>
 		<!-- 我的推广 -->
 		<view v-show="active === 2">
-			<view 
-				v-for="i in 10" 
-				:key="i"
+			<base-pagination 
+				ref="paginationRef" 
+				url="/tuiguang/getMyPage" 
+				:ask="true"
+				:loading="false"
 			>
-				<view class="p-16">
-					<view class="flex items-center">
-						<view class="shrink-0 w-36 h-36 rounded-xs">
-							<u-image src="https://cdn.pixabay.com/photo/2021/11/12/03/04/woman-6787784__340.png" width="72rpx" height="72rpx" radius="8" />
-						</view>
-						<view class="ml-10 grow">
-							<view class="flex items-center justify-between">
-								<view class="text-base">{{ testObj.companyname }}</view>
-								<view class="px-6 py-1 bg-error text-white text-xs rounded-xs">置顶</view>
+				<template v-slot="{list}">
+					<navigator 
+						v-for="(item, index) in list"
+						:key="index"
+						:url="'/pages/promotion/detail?id='+item.id" 
+						hover-class="none"
+					>
+						<view class="p-16">
+							<view class="flex items-center">
+								<view class="shrink-0 w-36 h-36 rounded-xs">
+									<u-avatar :src="item.userthumbnail" size="36" />
+								</view>
+								<view class="ml-10 grow">
+									<view class="flex items-center justify-between">
+										<view class="text-base">{{ item.companyname }}</view>
+										<view 
+											v-if="item.level"
+											class="px-6 py-1 bg-error text-white text-xs rounded-xs"
+										>
+											{{ item.level }}
+										</view>
+									</view>
+									<view class="text-xs text-gray-500">{{ item.inserttime }}</view>
+								</view>
 							</view>
-							<view class="text-xs text-gray-500">2023-04-13 09:18:12</view>
-						</view>
-					</view>
-					<view class="mt-8">
-						<view class="line-2 text-lg font-bold">{{ testObj.title }}</view>
-						<view class="mt-8 text-base text-gray-700 line-3">{{ testObj.contact }}</view>
-						<view class="mt-8 flex justify-between">
-							<view 
-								v-for="(img, index) in testObj.images"
-								:key="index"
-								class="w-110 h-110 rounded-xs"
-							>
-								<u-image 
-									:src="img" 
-									width="220rpx" 
-									height="220rpx" 
-									radius="6" 
-									:lazy-load="true"
-								>
-									<template v-slot:loading>
-										<u-loading-icon />
-									</template>
-								</u-image>
+							<view class="mt-8">
+								<view class="line-2 text-lg font-bold">{{ item.title }}</view>
+								<view class="mt-8 text-base text-gray-700 line-3">{{ item.content }}</view>
+								<view class="mt-8 flex">
+									<view 
+										v-for="(img, index) in JSON.parse(item.images)"
+										:key="index"
+										class="w-110 h-110 rounded-xs mr-8"
+									>
+										<u-image 
+											:src="img" 
+											width="220rpx" 
+											height="220rpx" 
+											radius="6"
+											:lazy-load="true"
+										>
+											<template v-slot:loading>
+												<u-loading-icon />
+											</template>
+										</u-image>
+									</view>
+								</view>
+								<view class="mt-12 flex items-center">
+									<u-icon name="tags" color="#909193" />
+									<view class="ml-4 text-sm text-gray-500">{{ item.industryname }}</view>
+									<view class="ml-auto text-sm text-gray-500">{{ item.looknum }}浏览</view>
+								</view>
 							</view>
 						</view>
-						<view class="mt-12 flex items-center">
-							<u-icon name="tags" color="#909193" />
-							<view class="ml-4 text-sm text-gray-500">糖酒食品</view>
-							<view class="ml-auto text-sm text-gray-500">2399人浏览</view>
-						</view>
-					</view>
-				</view>
-				<u-line color="#e5e7eb" />
-			</view>
+						<u-line color="#e5e7eb" />
+					</navigator>
+				</template>
+			</base-pagination>
 		</view>
 	</view>
 </template>
 
 <script>
+	import BasePagination from '@/components/BasePagination.vue'
 	export default {
+		components: {
+			BasePagination
+		},
 		data() {
 			return {
+				params: {
+					industryid: null
+				},
 				navList: [
 					{ id: 1, name: '推荐' },
 					{ id: 2, name: '我的推广' }
@@ -159,19 +201,7 @@
 					'https://cdn.pixabay.com/photo/2015/07/17/22/43/student-849822__340.jpg',
 					'https://cdn.pixabay.com/photo/2015/05/31/13/45/working-791849__340.jpg',
 				],
-				tabs: [
-					{ name: '全部分类' },
-					{ name: '五金制品' },
-					{ name: '门窗卫浴' },
-					{ name: '建材家具' },
-					{ name: '微商电商' },
-					{ name: '糖酒食品' },
-					{ name: '鞋包服饰' },
-					{ name: '金融保险' },
-					{ name: '教育培训' },
-					{ name: '招商加盟' },
-					{ name: '招商加盟' }
-				],
+				tabs: [],
 				testObj: {
 					companyname: '防忽悠防诈骗智商实在是有限公司',
 					title: '惊爆！超级食物竟然能让你长寿200岁！',
@@ -184,10 +214,21 @@
 				}
 			}
 		},
+		onReachBottom() {
+			this.$refs.paginationRef.addPage()
+		},
 		onLoad(options) {
-			
+			this.getTabs()
 		},
 		methods: {
+			// 搜索
+			toSearch() {
+				if(this.active === 1) {
+					uni.navigateTo({
+						url: '/pages/search/index'
+					})
+				}
+			},
 			// 求换nav
 			changeNav(id) {
 				this.active = id
@@ -201,6 +242,15 @@
 				uni.navigateTo({
 					url: '/pages/promotion/add'
 				})
+			},
+			// 获取tabs
+			async getTabs() {
+				const res = await this.$api({ url: '/open/industry/getList'})
+				if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
+				if(res.data.code === 20000) this.tabs = [].concat([{ name: '全部分类', id: null }], res.data.data)
+			},
+			changeTabs({id}) {
+				this.params.industryid = id
 			}
 		}
 	}

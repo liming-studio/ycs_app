@@ -1,5 +1,5 @@
 <template>
-	<view class="w-full min-h-screen bg-gray-100 pb-32 relative">
+	<view class="w-full min-h-screen bg-gray-100 pb-12 relative">
 		<!-- 头部背景 -->
 		<view class="absolute w-full">
 			<view class="bg-top-1" />
@@ -174,49 +174,7 @@
 						<view class="w-4 h-14 rounded-lg bg-primary" />
 						<view class="ml-8 text-lg font-bold">热门推荐</view>
 					</view>
-					<view 
-						v-for="i in 20" 
-						:key="i"
-						class="w-full h-140 bg-white rounded-xs px-12 mb-8"
-					>
-						<view class="flex py-12">
-							<view class="shrink-0 w-100 h-75 rounded-sm">
-								<u-image 
-									:src="testObj.images[0]" 
-									width="200rpx" 
-									height="150rpx" 
-									radius="6" 
-									:lazy-load="true"
-								>
-									<template v-slot:loading>
-										<u-loading-icon />
-									</template>
-								</u-image>
-							</view>
-							<view class="ml-12 grow flex flex-col justify-between pb-1">
-								<view class="line-2">
-									<text class="px-6 py-1 bg-error text-white text-xs rounded-xs">置顶</text>
-									<text class="ml-8 text-lg">{{ testObj.title }}</text>
-								</view>
-								<view class="text-right text-xs">
-									<text class="text-gray-500">山东省威海市</text>
-									<text class="text-gray-300 px-6">|</text>
-									<text class="text-gray-500">制造业</text>
-									<text class="text-gray-300 px-6">|</text>
-									<text class="text-gray-500">2023-04-01</text>
-								</view>
-							</view>
-						</view>
-						<u-line color="#e5e7eb"/>
-						<view class="w-full h-40 flex items-center">
-							<u-icon name="kefu-ermai" color="#c0c4cc"></u-icon>
-							<view class="ml-6 text-sm text-gray-500">{{ testObj.companyname }}</view>
-							<view class="ml-auto px-2">
-								<u-icon name="star" color="#909193" size="large"></u-icon>
-							</view>
-						</view>
-					</view>
-					<!-- <base-pagination 
+					<base-pagination 
 						ref="paginationRef" 
 						url="/open/tuiguang/getPage" 
 						:ask="true"
@@ -224,13 +182,54 @@
 						:loading="false"
 					>
 						<template v-slot="{list}">
-							<view class="flex flex-wrap justify-between" style="padding: 0 20rpx">
-								<view v-for="(item, index) in list" :key="index">
-									{{ list }}
+							<view 
+								v-for="(item, index) in list" 
+								:key="index"
+							>
+							<navigator 
+								:url="'/pages/promotion/detail?id='+item.id" 
+								hover-class="none"
+							>
+							  <view class="w-full h-140 bg-white rounded-xs px-12 mb-8">
+									<view class="flex py-12">
+										<view class="shrink-0 w-100 h-75 rounded-sm">
+											<u-image 
+												:src="JSON.parse(item.images)[0]"
+												width="200rpx" 
+												height="150rpx" 
+												radius="6" 
+												:lazy-load="true"
+											>
+												<template v-slot:loading>
+													<u-loading-icon />
+												</template>
+											</u-image>
+										</view>
+										<view class="ml-12 grow flex flex-col justify-between pb-1">
+											<view class="line-2">
+												<text class="px-6 py-1 bg-error text-white text-xs rounded-xs">{{ item.level }}</text>
+												<text class="ml-8 text-lg">{{ item.title }}</text>
+											</view>
+											<view class="text-right text-xs">
+												<text class="text-gray-500">{{ item.industryname }}</text>
+												<text class="text-gray-300 px-6">|</text>
+												<text class="text-gray-500">{{ item.inserttime }}</text>
+											</view>
+										</view>
+									</view>
+									<u-line color="#e5e7eb"/>
+									<view class="w-full h-40 flex items-center">
+										<view class="shrink-0">
+											<u-avatar :src="item.userthumbnail" size="20" />
+										</view>
+										<view class="ml-6 text-gray-700 line-1 text-sm">{{ item.companyname }}</view>
+										<view class="ml-auto text-xs text-gray-500">{{ item.looknum }}浏览</view>
+									</view>
 								</view>
+							</navigator>
 							</view>
 						</template>
-					</base-pagination> -->
+					</base-pagination>
 				</view>
 				<!-- 返回顶部 -->
 				<u-back-top 
@@ -259,13 +258,7 @@
 					'https://cdn.uviewui.com/uview/swiper/swiper3.png',
 				],
 				kingkongList: [],
-				params: {},
-				testObj: {
-					companyname: '防忽悠防诈骗智商实在是有限公司',
-					title: '惊呆科学家！神秘生物从天而降，揭开地球起源之谜！',
-					images: ['https://cdn.pixabay.com/photo/2021/01/20/11/46/potbellied-pig-5933998__340.jpg'],
-					contact: '听说他，不当厨师，改防忽悠热线了，竟敢扬言再不上当受骗了。残酷的现实已直逼我心里防线了，今年我要不卖他点儿啥，承诺三年的话题我就没法儿跟观众兑现了',
-				}
+				params: {}
 			}
 		},
 		computed: {
@@ -288,22 +281,11 @@
 			}
 		},
 		onReachBottom() {
-			console.log('aa')
 			this.$refs.paginationRef.addPage()
 		},
 		onLoad() {
 		},
 		methods: {
-			// async getBannerList() {
-			// 	const res = await this.$api({ url: '/open/index/getBanner' })
-			// 	if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
-			// 	if(res.data.code === 20000) this.bannerList = res.data.data
-			// },
-			// async getKingKong() {
-			// 	const res = await this.$api({ url: '/open/index/getKingKong' })
-			// 	if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
-			// 	if(res.data.code === 20000) this.kingkongList = res.data.data
-			// },
 		}
 	}
 </script>

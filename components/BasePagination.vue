@@ -7,15 +7,15 @@
 			<u-loading-icon text="加载中,请稍后..." textSize="16" />
 		</view>
 		<view v-if="!finished && localList.length > 0 && !showLoading" class="p-4">
-			<u-loading-icon text="加载中,请稍后~" />
+			<u-loading-icon text="加载中,请稍后~" size="16" textSize="14"  />
 		</view>
 		<view v-show="finished && localList.length > 0" class="p-4">
 			<u-divider text="已经到底了" />
 		</view>
 		<view v-if="localList.length === 0 && !showLoading" class="flex flex-col" style="margin-top: 100rpx">
 			<u-empty
-				mode="list"
-				icon="http://cdn.uviewui.com/uview/empty/list.png"
+				mode="data"
+				icon="http://cdn.uviewui.com/uview/empty/data.png"
 				width="480rpx"
 				height="480rpx"
 				textSize="32rpx"
@@ -37,7 +37,7 @@
 			},
 			params: {
 				type: Object,
-				required: true
+				default: () => {}
 			},
 			size: {
 				type: Number,
@@ -72,7 +72,11 @@
 				const res = await this.$api({ url: this.url, data: pickBy(newParams)})
 				if(more) this.localList.push(...res.data.data.records)
 				if(!more) this.localList = res.data.data.records
-				if (res.data.data.current * res.data.data.size >= res.data.data.total)this.finished = true
+				console.log(res.data.data.current * res.data.data.size, res.data.data.total)
+				if (res.data.data.current * res.data.data.size >= res.data.data.total) {
+					alert('a')
+					this.finished = true
+				}
 				this.showLoading = false
 			},
 			addPage() {
