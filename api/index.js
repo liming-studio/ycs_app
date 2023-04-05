@@ -1,5 +1,5 @@
-// const BASE_URL = 'https://www.jnysqc.com/'
-const BASE_URL = 'https://192.168.1.149'
+const BASE_URL = 'https://www.jnysqc.com/'
+// const BASE_URL = 'https://192.168.1.149'
 
 export const api = (options) => {
  	return new Promise((resolve, reject) => {

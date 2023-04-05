@@ -177,9 +177,8 @@
 					<base-pagination 
 						ref="paginationRef" 
 						url="/open/tuiguang/getPage" 
-						:ask="true"
-						:params="params" 
-						:loading="false"
+						:params="params"
+						ask
 					>
 						<template v-slot="{list}">
 							<view 
@@ -190,7 +189,7 @@
 								:url="'/pages/promotion/detail?id='+item.id" 
 								hover-class="none"
 							>
-							  <view class="w-full h-140 bg-white rounded-xs px-12 mb-8">
+							  <view class="w-full h-136 bg-white rounded-xs px-12 mb-8">
 									<view class="flex py-12">
 										<view class="shrink-0 w-100 h-75 rounded-sm">
 											<u-image 
@@ -218,7 +217,7 @@
 										</view>
 									</view>
 									<u-line color="#e5e7eb"/>
-									<view class="w-full h-40 flex items-center">
+									<view class="w-full h-36 flex items-center">
 										<view class="shrink-0">
 											<u-avatar :src="item.userthumbnail" size="20" />
 										</view>

@@ -1,18 +1,27 @@
 <template>
 	<view>
-		<view v-show="!showLoading || !loading">
-			<slot :list="localList"></slot>
+		<view v-show="!showLoading">
+			<slot :list="localList" />
 		</view>
-		<view v-if="showLoading && loading" class="p-4 mt-4" >
-			<u-loading-icon text="加载中,请稍后..." textSize="16" />
-		</view>
-		<view v-if="!finished && localList.length > 0 && !showLoading" class="p-4">
+		<view v-if="!showLoading && !finished && localList.length > 0" class="p-4">
 			<u-loading-icon text="加载中,请稍后~" size="16" textSize="14"  />
 		</view>
-		<view v-show="finished && localList.length > 0" class="p-4">
-			<u-divider text="已经到底了" />
+		<view 
+			v-show="finished && localList.length > 0" 
+			class="p-16"
+		>
+			<view v-if="showDivider">
+				<u-divider text="已经到底了" />
+			</view>
+			<view v-else class="text-center text-gray-300">
+				已经到底了
+			</view>
 		</view>
-		<view v-if="localList.length === 0 && !showLoading" class="flex flex-col" style="margin-top: 100rpx">
+		<view 
+			v-if="localList.length === 0 && !showLoading" 
+			class="flex flex-col" 
+			style="margin-top: 100rpx"
+		>
 			<u-empty
 				mode="data"
 				icon="http://cdn.uviewui.com/uview/empty/data.png"
@@ -35,17 +44,17 @@
 				type: String,
 				required: true
 			},
+			showDivider: {
+				type: Boolean,
+				default: true
+			},
 			params: {
 				type: Object,
 				default: () => {}
 			},
 			size: {
 				type: Number,
-				default: 8
-			},
-			loading: {
-				type: Boolean,
-				default: true
+				default: 10
 			},
 			// 是否初次加载时直接获取数据
 			ask: {
@@ -72,7 +81,6 @@
 				const res = await this.$api({ url: this.url, data: pickBy(newParams)})
 				if(more) this.localList.push(...res.data.data.records)
 				if(!more) this.localList = res.data.data.records
-				console.log(res.data.data.current * res.data.data.size, res.data.data.total)
 				if (res.data.data.current * res.data.data.size >= res.data.data.total) {
 					this.finished = true
 				}
@@ -80,6 +88,7 @@
 			},
 			addPage() {
 				if(!this.finished) {
+					console.log('aa')
 					this.currentPage++
 					this.askApi()
 				}
@@ -94,15 +103,6 @@
 				},
 				deep: true // 深度监听父组件传过来对象变化
 			}
-			// currentPage: {
-			// 	handler(item,index) {
-			// 		console.log('c change')
-			// 		if(this.currentPage > 1) {
-			// 			this.askApi()
-			// 		}
-			// 	},
-			// 	deep: true // 深度监听父组件传过来对象变化
-			// }
 		}
 	}
 </script>

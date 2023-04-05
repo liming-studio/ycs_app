@@ -7,6 +7,15 @@
 .top-navbar {
     top: calc(var(--status-bar-height) + 44px)
 }
+.bottom-0 {
+    bottom: 0px;
+}
+.top-0 {
+    top: 0px;
+}
+.inset-0 {
+    inset: 0px;
+}
 //高度、宽度拓展
 .w-full {
     width: 100%;
@@ -109,15 +118,6 @@
 }
 .sticky {
     position: sticky;
-}
-.bottom-0 {
-    bottom: 0px;
-}
-.top-0 {
-    top: 0px;
-}
-.inset-0 {
-    inset: 0px;
 }
 // 元素类型
 .block {

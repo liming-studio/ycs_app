@@ -195,10 +195,9 @@ export default {
 				uni.$u.toast(res.data.msg)
 			}
 			if (res.data.code == 20000) {
-				// uni.setStorage({ key: 'phone', data: this.formData.phone })
 				uni.setStorage({ key: 'token', data: res.data.data.token })
 				uni.setStorage({ key: 'user', data: res.data.data.user })
-				uni.setStorage({ key: 'phone', data: res.data.data.phone })
+				uni.setStorage({ key: 'phone', data: this.formData.phone })
 				setTimeout(() => {
 					uni.hideLoading()
 					uni.$u.toast('登录成功')

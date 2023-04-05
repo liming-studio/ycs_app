@@ -36,7 +36,7 @@
 		</view>
 		<u-gap height="8" bgColor="#f3f4f6"></u-gap>
 		<!-- 推荐 -->
-		<view v-show="active === 1">
+		<view v-if="active === 1">
 			<view class="sticky top-navbar bg-white z-20 pb-4">
 				<u-tabs 
 					:list="tabs"
@@ -48,9 +48,9 @@
 			<base-pagination 
 				ref="paginationRef" 
 				url="/open/tuiguang/getPage" 
-				:ask="true"
-				:params="params" 
-				:loading="false"
+				:params="params"
+				:show-divider="false"
+				ask
 			>
 				<template v-slot="{list}">
 					<navigator 
@@ -112,12 +112,12 @@
 			</base-pagination>
 		</view>
 		<!-- 我的推广 -->
-		<view v-show="active === 2">
+		<view v-if="active === 2">
 			<base-pagination 
 				ref="paginationRef" 
-				url="/tuiguang/getMyPage" 
-				:ask="true"
-				:loading="false"
+				url="/tuiguang/getMyPage"
+				:show-divider="false"
+				ask
 			>
 				<template v-slot="{list}">
 					<navigator 
@@ -201,17 +201,7 @@
 					'https://cdn.pixabay.com/photo/2015/07/17/22/43/student-849822__340.jpg',
 					'https://cdn.pixabay.com/photo/2015/05/31/13/45/working-791849__340.jpg',
 				],
-				tabs: [],
-				testObj: {
-					companyname: '防忽悠防诈骗智商实在是有限公司',
-					title: '惊爆！超级食物竟然能让你长寿200岁！',
-					images: [
-						'https://cdn.pixabay.com/photo/2018/07/24/21/47/pear-3560106__340.jpg',
-						'https://cdn.pixabay.com/photo/2016/11/06/23/31/breakfast-1804457__340.jpg',
-						'https://cdn.pixabay.com/photo/2016/03/23/15/00/ice-cream-1274894__340.jpg'
-					],
-					contact: '近日，一项惊人的研究揭示了一个极具魅力的发现：一种名为“长寿之果”的超级食物可能会让人类寿命翻倍，让你活到200岁！据研究人员介绍，这种神奇的果实是在偏远的热带丛林中发现的，历经多年的实验研究和验证，其富含各种营养成分和抗氧化物质，能够帮助人类延缓衰老和提高免疫力。更为惊人的是，长期食用这种果实的人类实验对象，实际上显示出了令人难以置信的寿命增长。',
-				}
+				tabs: []
 			}
 		},
 		onReachBottom() {
@@ -219,11 +209,23 @@
 		},
 		onLoad(options) {
 			this.getTabs()
+			if(uni.getStorageSync("promotionActive")) {
+				this.active = uni.getStorageSync("promotionActive")
+			}
+			uni.setStorage({ key: 'promotionActive', data: 1 })
+		},
+		onShow() {
+			// this.$nextTick(() => {
+			// 	console.log(getCurrentPages())
+			// 	uni.pageScrollTo({scrollTop: 0, duration: 0 })
+			// 	this.$refs.paginationRef.askApi(false)
+			// })
 		},
 		methods: {
 			// 搜索
 			toSearch() {
 				if(this.active === 1) {
+					uni.setStorage({ key: 'searchType', data: 'promotion' })
 					uni.navigateTo({
 						url: '/pages/search/index'
 					})
@@ -232,10 +234,7 @@
 			// 求换nav
 			changeNav(id) {
 				this.active = id
-				uni.pageScrollTo({
-					scrollTop: 0,
-					duration: 0
-				})
+				uni.pageScrollTo({scrollTop: 0, duration: 0 })
 			},
 			// 发布推广
 			addPromote() {
