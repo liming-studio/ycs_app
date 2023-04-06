@@ -164,8 +164,11 @@
 		{
       "path": "pages/ecard/index",
       "style": {
-        "navigationBarTitleText": "我的名片"
-      }
+				"app-plus": {  
+					"titleNView": false,
+					"bounce": "none"
+				} 
+			}
     },
     {
       "path": "pages/ecard/add",

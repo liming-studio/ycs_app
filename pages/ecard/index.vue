@@ -1,9 +1,19 @@
 <!-- 我的名片 -->
 <template>
   <view 
-    class="w-full bg-gray-100" 
+    class="w-full bg-main" 
+    bgColor="rgba(236,236,236,0.2)"
     :style="{height: screenHeight + 'px'}"
   >
+    <view class="stikcy top-0 w-full h-44 flex-center relative">
+      <view 
+        class="absolute left-0 px-16 h-44 flex items-center"
+        @click="back"
+      >
+        <u-icon name="arrow-left" size="20"></u-icon>
+      </view>
+      <view class="text-xl">我的名片</view>
+    </view>
     <!-- loading -->
     <u-loading-page :loading="showLoading" />
     <view v-if="!showLoading">
@@ -29,7 +39,7 @@
       </view>
       <!-- content -->
       <view v-else class="w-full p-16">
-        <view class="w-full h-440 bg-white rounded-xl p-16">
+        <view class="w-full bg-white rounded-xl px-16 pt-16 pb-24">
           <view class="w-full h-300 rounded-xl">
             <u-image 
               :src="JSON.parse(message.thumbnail)[0]"
@@ -45,24 +55,21 @@
             </u-image>
           </view>
           <view class="px-16">
-            <view class="mt-12 flex items-cneter">
-              <u-icon name="account-fill" size="20" color="#c0c4cc" />
-              <view class="ml-12 line-1">
-                <text>{{ message.name }}</text>
-                <text class="ml-8">{{ message.position }}</text>
-              </view>
+            <view class="mt-16 line-1 text-2xl font-bold">
+              <text>{{ message.name }}</text>
+              <text class="ml-8">{{ message.position }}</text>
             </view>
-            <view class="mt-4 flex items-center">
+            <view class="mt-12 flex items-center">
               <u-icon name="phone-fill" size="20" color="#c0c4cc" />
-              <text class="ml-12 line-1">{{ message.mobile }}</text>
+              <text class="ml-12 line-1 text-gray-700 text-lg">{{ message.mobile }}</text>
             </view>
-            <view class="mt-4 flex items-center">
+            <view class="mt-8 flex items-center">
               <u-icon name="bookmark-fill" size="20" color="#c0c4cc" />
-              <text class="ml-12 line-1">{{ message.companyname }}</text>
+              <text class="ml-12 line-1 text-gray-700 text-lg">{{ message.companyname }}</text>
             </view>
-            <view class="mt-4 flex items-center">
+            <view class="mt-8 flex items-center">
               <u-icon name="map-fill" size="20" color="#c0c4cc" />
-              <text class="ml-12 line-1">{{ message.companyaddress }}</text>
+              <text class="ml-12 line-1 text-gray-700 text-lg">{{ message.companyaddress }}</text>
             </view>
           </view>
         </view>
@@ -108,6 +115,9 @@
       this.screenHeight = uni.getSystemInfoSync().windowHeight
     },
     methods: {
+      back() {
+        uni.navigateBack()
+      },
       async getCardDetail() {
         const res = await this.$api({ url: '/card/getDetail' })
         if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
@@ -120,3 +130,9 @@
     },
   }
 </script>
+<style scoped>
+.bg-main {
+  background: rgb(236,236,236);
+  background: linear-gradient(180deg, rgba(236,236,236,1) 0%, rgba(192,239,242,1) 25%, rgba(250,243,252,1) 70%);
+} 
+</style>

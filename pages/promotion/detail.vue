@@ -108,7 +108,7 @@
         }
         setTimeout(() => {
           this.showLoading = false
-        }, 150)
+        }, 300)
       },
     },
   }
