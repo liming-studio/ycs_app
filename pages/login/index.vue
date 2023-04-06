@@ -202,7 +202,7 @@ export default {
 					uni.hideLoading()
 					uni.$u.toast('登录成功')
 					this.btnDisabled = false
-					uni.switchTab({ url:"/pages/index/index"})
+					uni.reLaunch({ url:"/pages/index/index"})
 				}, 200)
 			}
 		},

@@ -164,13 +164,37 @@
 		{
       "path": "pages/ecard/index",
       "style": {
-        "navigationBarTitleText": "电子名片"
+        "navigationBarTitleText": "我的名片"
+      }
+    },
+    {
+      "path": "pages/ecard/add",
+      "style": {
+        "navigationBarTitleText": "上传名片"
+      }
+    },
+    {
+      "path": "pages/ecard/edit",
+      "style": {
+        "navigationBarTitleText": "编辑名片"
       }
     },
 		{
       "path": "pages/vip/index",
       "style": {
         "navigationBarTitleText": "vip会员"
+      }
+    },
+    {
+      "path": "pages/agreement/index",
+      "style": {
+        "navigationBarTitleText": "服务协议"
+      }
+    },
+    {
+      "path": "pages/privacy/index",
+      "style": {
+        "navigationBarTitleText": "隐私政策"
       }
     }
   ],

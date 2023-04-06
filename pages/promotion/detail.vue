@@ -18,8 +18,8 @@
         <u-empty
           mode="data"
           icon="http://cdn.uviewui.com/uview/empty/data.png"
-          width="480rpx"
-          height="480rpx"
+          width="450rpx"
+          height="450rpx"
           textSize="28rpx"
         />
       </view>

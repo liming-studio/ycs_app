@@ -22,8 +22,8 @@
           v-model="params.content"
           placeholder="请输入搜索关键字"
           shape="square"
-          @search="toSearch"
-          @custom="toSearch"
+          @search="handleSearch"
+          @custom="handleSearch"
         />
       </view>
       <view class="w-full h-36 flex items-center px-8">
@@ -61,9 +61,9 @@
           <u-empty
             mode="search"
             icon="http://cdn.uviewui.com/uview/empty/search.png"
-            width="480rpx"
-            height="480rpx"
-            textSize="32rpx"
+            width="450rpx"
+            height="450rpx"
+            textSize="28rpx"
             text="检索数据为空"
           />
         </view>
@@ -95,6 +95,7 @@
 </template>
 
 <script>
+  import { throttle } from 'lodash'
   export default {
     data() {
       return {
@@ -115,11 +116,19 @@
         const res = await this.$api({ url: '/open/map/getCityList' })
         this.areaList = res.data.data
       },
+      handleSearch: throttle(function(value) {
+        uni.showLoading({ title: '采集中' })
+        this.toSearch(value)
+      }, 1500, {leading: true, trailing: false}),
       async toSearch(value) {
         const res = await this.$api({ url: '/map/getMapList',  data: this.params })
-        if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
+        if(res.data.code !== 20000) {
+          setTimeout(() => {
+            uni.hideLoading()
+            uni.$u.toast(res.data.msg)
+          }, 1000)
+        }
         if(res.data.code === 20000) {
-          uni.showLoading({ title: '采集中' })
           setTimeout(() => {
             this.showDefault = false
             this.list = res.data.data

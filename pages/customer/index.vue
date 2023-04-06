@@ -2,7 +2,7 @@
 	<view class="w-full min-h-screen bg-gray-100 pt-navbar relative">
 		<u-navbar
 			title="客源管理"
-			leftIcon=""	
+			leftIcon=""
 		>
 			<view slot="right">
 				<u-button text="清空" shape="circle" size="small" @click="clear" />
@@ -22,13 +22,14 @@
 				<base-pagination 
 					ref="paginationRef" 
 					url="/history/getPage"
-					ask
+					:params="params"
+					show-page-loading
 				>
 					<template v-slot="{list}">
 						<navigator 
 							v-for="(item, index) in list" 
 							:key="index"
-							:url="'/pages/customer/detail?id='+item.id" 
+							:url="`/pages/customer/detail?id=${item.id}&type=${item.type}`"
 							hover-class="none"
 							class="w-full h-80 bg-white mb-8 rounded-xs p-16"
 						>
@@ -44,7 +45,7 @@
 							<view class="mt-8 text-sm">
 								<text class="text-primary">{{ item.type }}</text>
 								<text class="text-gray-300 px-4">|</text>
-								<text class="text-gray-500">30条数据</text>
+								<text class="text-gray-500">{{ item.num }}条数据</text>
 								<text class="text-gray-300 px-4">|</text>
 								<text class="text-gray-500">{{ item.inserttime }}</text>
 							</view>
@@ -65,11 +66,15 @@
 		data() {
 			return {
 				tabs: [
-					{ name: '全部来源' },
-					{ name: '精准拓客' },
-					{ name: '附近拓客' },
-					{ name: '企查拓客' }
+					{ name: '全部来源', id: -1 },
+					{ name: '精准拓客', id: 0 },
+					{ name: '附近拓客', id: 1},
+					{ name: '企查拓客', id: 2 }
 				],
+				activeName: '全部来源',
+				params: {
+					type: -1
+				}
 			}
 		},
 		onShow() {
@@ -82,17 +87,18 @@
 			this.$refs.paginationRef.addPage()
 		},
 		methods: {
-			changeTabs(id) {
-				this.active = id
+			changeTabs({name, id}) {
+				this.activeName = name
+				this.params.type = id
 				uni.pageScrollTo({scrollTop: 0, duration: 0 })
 			},
 			clear() {
 				uni.showModal({
 					title: '提示',
-					content: '你确定要清空客源管理数据吗？',
+					content: `你确定要清空${this.activeName}数据吗？`,
 					icon: 'fail',
-					success: () => {
-						this.removeAll()
+					success: (res) => {
+						if(res.confirm) this.removeAll()
 					}
 				})
 			},
@@ -105,7 +111,7 @@
         }
 			},
 			async removeAll() {
-				const res = await this.$api({ url: '/history/deleteBatch' })
+				const res = await this.$api({ url: '/history/deleteBatch', data: this.params })
 				if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
 				if(res.data.code === 20000) {
 					this.$refs.paginationRef.askApi(false)

@@ -20,15 +20,14 @@
 						云畅搜
 					</view>
 					<view class="grow px-9">
-						<navigator url="/pages/search/index" hover-class="none">
-							<view 
-								class="w-full h-32 bg-white rounded-sm flex items-center px-8"
-								:style="searchStyle"
-							>
-								<u-icon name="search" size="20" color="#3c9cff" />
-								<view class="ml-4 text-gray-300">请输入关键词</view>
-							</view>
-						</navigator>
+						<view 
+							class="w-full h-32 bg-white rounded-sm flex items-center px-8"
+							:style="searchStyle"
+							@click="toSearch"
+						>
+							<u-icon name="search" size="20" color="#3c9cff" />
+							<view class="ml-4 text-gray-300">请输入关键词</view>
+						</view>
 					</view>
 					<navigator 
 						url="/pages/vip/index" 
@@ -50,12 +49,13 @@
 			<!-- content -->
 			<view class="px-16 relative">
 				<!-- search -->
-				<navigator url="/pages/search/index" hover-class="none">
-					<view class="w-full h-42 rounded-2xl bg-white flex items-center px-14">
-						<u-icon name="search" size="24" color="#909193" />
-						<view class="ml-8 text-gray-300">请输入关键词</view>
-					</view>
-				</navigator>
+					<view 
+					class="w-full h-42 rounded-2xl bg-white flex items-center px-14"
+					@click="toSearch"	
+				>
+					<u-icon name="search" size="24" color="#909193" />
+					<view class="ml-8 text-gray-300">请输入关键词</view>
+				</view>
 				<!-- kingkong -->
 				<u-grid  :border="false" col="4" class="mt-12">
 					<!-- 精准拓客 -->
@@ -113,7 +113,7 @@
 					>
 						<view class="absolute inset-0 z-10 rounded-sm bg-primary bg-linear-near p-12">
 							<view class="text-lg text-sky-600">附近拓客</view>
-							<view class="text-xs opacity-80">了解附近10km企业</view>
+							<view class="text-xs opacity-80">搜索附近10km客源</view>
 							<view class="mt-12 w-60">
 								<u-button 
 									size="mini" 
@@ -285,6 +285,12 @@
 		onLoad() {
 		},
 		methods: {
+			toSearch() {
+				uni.setStorage({ key: 'searchType', data: 'promotion' })
+				uni.navigateTo({
+					url: '/pages/search/index'
+				})
+			}
 		}
 	}
 </script>

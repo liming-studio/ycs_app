@@ -210,10 +210,10 @@ export default {
 				uni.$u.toast(res.data.msg)
 			}
 			if (res.data.code == 20000) {
-        uni.setStorage({ key: 'phone', data: res.data.data.phone })
+        uni.setStorage({ key: 'phone', data: this.formData.phone })
+				uni.$u.toast('注册成功')
 				setTimeout(() => {
-					uni.hideLoading()
-					uni.$u.toast('登录成功')
+          uni.hideLoading()
 					this.btnDisabled = false
           uni.reLaunch({ url: '/pages/login/index' })
 				}, 200)

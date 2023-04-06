@@ -9,6 +9,7 @@
       url="/open/tuiguang/getPage"
       :params="params"
       :show-divider="false"
+      empty-type="search"
       ask
     >
       <template v-slot="{list}">

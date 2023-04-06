@@ -1,90 +1,95 @@
 <template>
   <view class="w-full relative px-16">
-    <u-form
-      ref="uForm"
-      :model="form"
-      :rules="rules"
-      labelPosition="left"
-      labelWidth="79"
-    >
-      <!-- 公司名称 -->
-      <u-form-item label="公司名称" borderBottom prop="companyname">
-				<u-input 
-          v-model="form.companyname" 
-          border="none" 
-          placeholder="请输入公司名称"
-          clearable
-        />
-			</u-form-item>
-      <!-- 联系方式 -->
-      <u-form-item label="联系方式" borderBottom prop="contact">
-				<u-input 
-          v-model="form.contact"
-          type="number"
-          border="none" 
-          placeholder="请输入联系方式"
-          clearable
-        />
-			</u-form-item>
-      <!-- 推广标题 -->
-      <u-form-item label="推广标题" borderBottom prop="title">
-				<u-input 
-          v-model="form.title" 
-          border="none" 
-          placeholder="请输入推广标题"
-          clearable
-        />
-			</u-form-item>
-      <!-- 选择行业 -->
-      <u-form-item 
-        label="选择行业" borderBottom 
-        prop="industryid" 
-        @click="industry.show = true"
+    <!-- loading -->
+    <u-loading-page :loading="showLoading" />
+    <!-- content -->
+    <view v-if="!showLoading">
+      <u-form
+        ref="uForm"
+        :model="form"
+        :rules="rules"
+        labelPosition="left"
+        labelWidth="79"
       >
-        <u-input
-          v-model="industry.selText"
-          disabled
-          disabledColor="#ffffff"
-          placeholder="请选择行业"
-          border="none"
-        />
-        <u-icon
-          slot="right"
-          name="arrow-right"
-        />
-			</u-form-item>
-      <!-- 详细描述 -->
-      <u-form-item label="详细描述" borderBottom prop="content">
-				<u-textarea 
-          v-model="form.content" 
-          placeholder="请输入详细描述"
-          maxlength="150"
-          count
-          clearable
-        />
-			</u-form-item>
-       <!-- 图片上传 -->
-       <u-form-item label="图片上传" borderBottom prop="images">
-				<u-upload
-          :fileList="fileList1"
-          @afterRead="afterRead"
-          @delete="deletePic"
-          name="1"
-          multiple
-          :maxCount="3"
-        />
-			</u-form-item>
-    </u-form>
-    <view class="mt-48">
-      <u-button type="primary" shape="circle"  @click="submit">提交</u-button>
+        <!-- 公司名称 -->
+        <u-form-item label="公司名称" borderBottom prop="companyname">
+          <u-input 
+            v-model="form.companyname" 
+            border="none" 
+            placeholder="请输入公司名称"
+            clearable
+          />
+        </u-form-item>
+        <!-- 联系方式 -->
+        <u-form-item label="联系方式" borderBottom prop="contact">
+          <u-input 
+            v-model="form.contact"
+            type="number"
+            border="none" 
+            placeholder="请输入您的联系方式"
+            clearable
+          />
+        </u-form-item>
+        <!-- 推广标题 -->
+        <u-form-item label="推广标题" borderBottom prop="title">
+          <u-input 
+            v-model="form.title" 
+            border="none" 
+            placeholder="请输入推广标题"
+            clearable
+          />
+        </u-form-item>
+        <!-- 选择行业 -->
+        <u-form-item 
+          label="选择行业" borderBottom 
+          prop="industryid" 
+          @click="industry.show = true"
+        >
+          <u-input
+            v-model="industry.selText"
+            disabled
+            disabledColor="#ffffff"
+            placeholder="请选择行业"
+            border="none"
+          />
+          <u-icon
+            slot="right"
+            name="arrow-right"
+          />
+        </u-form-item>
+        <!-- 详细描述 -->
+        <u-form-item label="详细描述" borderBottom prop="content">
+          <u-textarea 
+            v-model="form.content" 
+            placeholder="请输入详细描述"
+            maxlength="150"
+            count
+            clearable
+          />
+        </u-form-item>
+        <!-- 图片上传 -->
+        <u-form-item label="图片上传" borderBottom prop="images">
+          <u-upload
+            :fileList="fileList1"
+            @afterRead="afterRead"
+            @delete="deletePic"
+            name="1"
+            multiple
+            :maxCount="3"
+          />
+        </u-form-item>
+      </u-form>
+      <view class="mt-48">
+        <u-button type="primary" shape="circle"  @click="submit">提交</u-button>
+      </view>
+      <u-picker 
+        :show="industry.show" 
+        :columns="industry.list"
+        keyName="name"
+        @cancel="industry.show = false"
+        @confirm="confirmIndustry"
+      />
     </view>
-    <u-picker 
-      :show="industry.show" 
-      :columns="industry.list"
-      keyName="name"
-      @cancel="industry.show = false"
-      @confirm="confirmIndustry"
-    />
   </view>
 </template>
 
@@ -92,6 +97,7 @@
 export default {
   data() {
     return {
+      showLoading: true,
       fileList1: [],
       industry: {
         show: false,
@@ -150,6 +156,7 @@ export default {
       const res = await this.$api({ url: '/open/industry/getList'})
       if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
       if(res.data.code === 20000) this.industry.list = [res.data.data]
+      setTimeout(() => this.showLoading = false, 100)
     },
     // 选择行业
     confirmIndustry({value}) {
