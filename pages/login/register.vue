@@ -115,11 +115,23 @@
 			>
 				<u-icon v-show="checkAgreement" name="checkbox-mark" color="#FFFFFF" size="12"></u-icon>
 			</view>
-			<view class="ml-4 text-sm">
-				<text class="text-gray-300">已阅读并同意</text>
-				<text class="text-primary">《用户协议》</text>
-				<text class="text-gray-300">和</text>
-				<text class="text-primary">《隐私协议》</text>
+			<view class="ml-4 text-sm flex items-cenetr">
+				<view class="text-gray-300">已阅读并同意</view>
+				<navigator 
+					url="/pages/agreement/index"
+					hover-class="none"
+					class="text-primary"
+				>
+					《服务协议》
+				</navigator>
+				<view class="text-gray-300">和</view>
+				<navigator 
+					url="/pages/privacy/index"
+					hover-class="none"
+					class="text-primary"
+				>
+					《隐私政策》
+				</navigator>
 			</view>
 		</view>
   </view>

@@ -7,6 +7,9 @@
 .top-navbar {
     top: calc(var(--status-bar-height) + 44px)
 }
+.top-statusbar {
+    top: var(--status-bar-height)
+}
 .bottom-0 {
     bottom: 0px;
 }

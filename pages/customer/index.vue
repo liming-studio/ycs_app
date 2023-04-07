@@ -1,5 +1,8 @@
 <template>
-	<view class="w-full min-h-screen bg-gray-100 pt-navbar relative">
+	<view 
+		class="w-full bg-gray-100 pt-navbar relative"
+		:style="{minHeight: screenHeight + 'px'}"
+	>
 		<u-navbar
 			title="客源管理"
 			leftIcon=""
@@ -65,6 +68,7 @@
 		},
 		data() {
 			return {
+				screenHeight: '',
 				tabs: [
 					{ name: '全部来源', id: -1 },
 					{ name: '精准拓客', id: 0 },
@@ -76,6 +80,9 @@
 					type: -1
 				}
 			}
+		},
+		onLoad(options) {
+			this.screenHeight = uni.getSystemInfoSync().windowHeight
 		},
 		onShow() {
 			this.$nextTick(() => {

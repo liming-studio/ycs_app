@@ -162,16 +162,22 @@
           wechat: [],           // 上传微信二维码
         },
         rules: {
+          'thumbnail': {
+            type: 'array',
+            required: true,
+            message: '请上传头像',
+            trigger: ['blur', 'change']
+          },
           'name': {
             type: 'string',
             required: true,
-            message: '请输入您的姓名',
+            message: '请输入姓名',
             trigger: ['blur', 'change']
           },
           'mobile': {
             type: 'string',
             required: true,
-            message: '请输入您的对外联系号码',
+            message: '请输入对外联系号码',
             trigger: ['blur', 'change']
           },
           'companyname': {
@@ -268,7 +274,7 @@
       // 提交
       submit() {
         this.$refs.uForm.validate().then(res => {
-          this.add({            
+          this.edit({            
             thumbnail: JSON.stringify(this.form.thumbnail),      
             name:  this.form.name,           
             mobile: this.form.mobile,          
@@ -284,7 +290,7 @@
           uni.$u.toast('填写信息不完整')
         })
       },
-      async add(data) {
+      async edit(data) {
         const res = await this.$api({ method: 'POST', url: '/card/updateCard', data: data })
         uni.$u.toast(res.data.msg)
         uni.setStorage({ key: 'promotionActive', data: 2 }) // 1推荐 2我的推广

@@ -1,7 +1,7 @@
 <!-- 我的名片 -->
 <template>
   <view 
-    class="w-full bg-main" 
+    class="w-full bg-main pt-statusbar" 
     bgColor="rgba(236,236,236,0.2)"
     :style="{height: screenHeight + 'px'}"
   >

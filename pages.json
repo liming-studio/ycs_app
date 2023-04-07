@@ -131,8 +131,29 @@
 		{
       "path": "pages/user/index",
       "style": {
-        "navigationBarTitleText": "我的"
-      }
+				"app-plus": {  
+					"titleNView": false,
+					"bounce": "none"
+				} 
+			}
+    },
+    {
+      "path": "pages/user/set",
+      "style": {
+        "navigationBarTitleText": "设置",
+        "app-plus": {
+					"bounce": "none"
+				} 
+			}
+    },
+    {
+      "path": "pages/user/edit",
+      "style": {
+        "navigationBarTitleText": "个人信息",
+        "app-plus": {
+					"bounce": "none"
+				} 
+			}
     },
 		{
       "path": "pages/search/index",
