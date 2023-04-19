@@ -75,8 +75,9 @@ export default {
       const res = await this.$api({ url: '/user/getMyInfo' })
       if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
       if(res.data.code === 20000) {
-        this.form.thumbnail = res.data.thumbnail ? [res.data.thumbnail] : []
-        this.form.name = res.data.name
+        this.fileList1 = res.data.data.thumbnail ? [{url: res.data.data.thumbnail}] : []
+        this.form.thumbnail = res.data.data.thumbnail ? [res.data.data.thumbnail] : []
+        this.form.name = res.data.data.name
         // this.form.mobile = res.data.mobile
       }
       setTimeout(() => this.showLoading = false, 200)
@@ -119,7 +120,7 @@ export default {
       const res = await this.$api({ 
         url: '/user/updateThumbnail', 
         data: {
-          thumbnail: this.form.thumbnail && this.form.thumbnail.length > 0 ? this.form.thumbnail.length[0] : '',      
+          thumbnail: this.form.thumbnail && this.form.thumbnail.length > 0 ? this.form.thumbnail[0] : '',      
           name:  this.form.name,   
         } 
       })

@@ -286,9 +286,9 @@
 		},
 		methods: {
 			toSearch() {
-				uni.setStorage({ key: 'searchType', data: 'promotion' })
+				// uni.setStorage({ key: 'searchType', data: 'promotion' })
 				uni.navigateTo({
-					url: '/pages/search/index'
+					url: '/pages/precise/index'
 				})
 			}
 		}

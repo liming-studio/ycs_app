@@ -1,6 +1,6 @@
 <template>
   <view class="relative pb-72">
-    <view class="fixed w-full h-80 px-8 bg-white z-10">
+    <view class="fixed w-full h-80 px-16 bg-white z-10">
       <view class="w-full h-44 flex items-center">
         <!-- 搜索 -->
         <u-search 
@@ -11,7 +11,7 @@
           @custom="handleSearch"
         />
       </view>
-      <view class="w-full h-36 flex items-center px-8">
+      <view class="w-full h-36 flex items-center">
         <text class="text-gray-500">共检索信息</text>
         <text class="text-primary px-4 font-bold">{{ list.length }}</text>
         <text class="text-gray-500">条</text>

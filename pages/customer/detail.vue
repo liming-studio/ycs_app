@@ -2,13 +2,15 @@
   <view class="min-h-screen bg-gray-100">
     <u-loading-page :loading="showLoading" />
     <view v-if="!showLoading">
-      <view class="sticky top-navbar py-8 px-16 text-sm bg-white z-10">
-        <text class="text-gray-500">搜索条件：</text>
-        <text class="text-primary">{{ message.title }}</text>
-        <text class="text-gray-500">，共搜出</text>
-        <text class="text-primary px-2">{{ message.num }}</text>
-        <text class="text-gray-500">条客源数据</text>
-      </view>
+      <u-sticky>
+        <view class="py-8 px-16 text-sm bg-white z-10">
+          <text class="text-gray-500">搜索条件：</text>
+          <text class="text-primary">{{ message.title }}</text>
+          <text class="text-gray-500">，共搜出</text>
+          <text class="text-primary px-2">{{ message.num }}</text>
+          <text class="text-gray-500">条客源数据</text>
+        </view>
+      </u-sticky>
       <view class="p-16">
         <view
           v-for="(item, index) in JSON.parse(message.content)"
