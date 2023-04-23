@@ -1,7 +1,18 @@
 <script>
 	export default {
 		onLaunch: function() {
-			console.log('App Launch')
+			// #ifdef APP-PLUS
+			if(!uni.getStorageSync('phone') || !uni.getStorageSync('password')) {
+				uni.reLaunch({
+					url:"/pages/login/index",
+					success:() => {
+						plus.navigator.closeSplashscreen() //跳转完页面后再关闭启动页
+					}
+				})
+			} else {
+				plus.navigator.closeSplashscreen()
+			}
+			// #endif
 		},
 		onShow: function() {
 			console.log('App Show')

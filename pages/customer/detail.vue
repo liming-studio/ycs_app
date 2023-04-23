@@ -17,7 +17,7 @@
           :key="index"
           class="w-full bg-white rounded-xs mb-12"
         >
-          <view class="p-12 flex items-end">
+          <view class="pt-12 px-12 pb-4 flex items-end">
             <view class="flex-grow mr-8">
               <view class="text-lg">
                 <text v-if="message.type === '企查拓客'">{{ item.companyName }}</text>
@@ -32,7 +32,7 @@
             </view>
             <view class="shrink-0 ml-auto w-80 flex items-center justify-end">
               <!-- 打电话 -->
-              <view v-if="item.phone" class="p-4">
+              <view v-if="item.phone" class="p-4" @click="call(item.phone)">
                 <u-icon name="phone" color="#2979ff" size="20" />
               </view>
               <!-- 收藏 -->
@@ -42,9 +42,9 @@
             </view>
           </view>
           <u-line color="#e5e7eb" />
-          <view class="px-12 py-6 text-xs flex items-center">
-            <u-icon name="map" color="#909193"></u-icon>
-            <view class="text-gray-500">{{ item.address }}</view>
+          <view class="px-12 py-6 text-xs flex items-start">
+            <u-icon name="map" color="#909193" class="mt-1" />
+            <view class="ml-1 text-gray-500">{{ item.address }}</view>
           </view>
         </view>
         <u-divider text="已经到底了" />
@@ -77,6 +77,11 @@ export default {
       if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
       if(res.data.code === 20000) Object.assign(this.message, res.data.data)
       setTimeout(() => this.showLoading = false, 200)
+    },
+    call(phoneNum) {
+      uni.makePhoneCall({
+        phoneNumber: phoneNum //仅为示例
+      })
     }
   },
 }

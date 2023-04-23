@@ -122,7 +122,7 @@ export default {
     return {
 			formData: {
 				loginType: true,
-				phone: uni.getStorageSync('phone') || '',
+				phone: '',
 				password: '',
         captcha: ''
 			},
@@ -131,6 +131,11 @@ export default {
 			btnDisabled: true 	    // 登录按钮禁用状态
     }
   },
+	mounted() {
+		this.formData.phone = uni.getStorageSync('phone')
+		this.formData.password = uni.getStorageSync('password')
+		if(uni.getStorageSync('phone') && uni.getStorageSync('password')) this.login()
+	},
   methods: {
 		// 切换登录状态
 		changeLoginType() {
@@ -209,7 +214,8 @@ export default {
 			if (res.data.code == 20000) {
 				uni.setStorage({ key: 'token', data: res.data.data.token })
 				uni.setStorage({ key: 'user', data: res.data.data.user })
-				uni.setStorage({ key: 'phone', data: this.formData.phone })
+				uni.setStorage({ key: 'phone', data: res.data.data.mobile })
+				uni.setStorage({ key: 'password', data: res.data.data.password })
 				setTimeout(() => {
 					uni.hideLoading()
 					uni.$u.toast('登录成功')
