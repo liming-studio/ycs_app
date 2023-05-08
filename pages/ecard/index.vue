@@ -40,7 +40,9 @@
       <!-- content -->
       <view v-else class="w-full p-16">
         <view class="w-full bg-white rounded-xl px-16 pt-16 pb-24">
-          <view class="w-full h-300 rounded-xl">
+          <view
+            class="w-full h-300 rounded-xl"
+          >
             <u-image 
               :src="JSON.parse(message.thumbnail)[0]"
               width="100%"

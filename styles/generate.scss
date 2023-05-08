@@ -179,4 +179,8 @@ $rounded_size_list: 5, 8, 10, 12, 16, 24, 36, 48, 56; //圆角
     .rounded-#{$size} {
         border-radius: #{$rounded_size * $step}#{$pixis};
     }
+    .rounded-t-#{$size} {
+        border-top-left-radius: #{$rounded_size * $step}#{$pixis};
+        border-top-right-radius: #{$rounded_size * $step}#{$pixis};
+    }
 }

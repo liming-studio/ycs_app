@@ -82,10 +82,29 @@
 				} 
 			}
     },
+    {
+      "path": "pages/promotion/me",
+      "style": {
+				"navigationBarTitleText": "我的推广",
+        "app-plus": {
+					"titleNView": false,
+					"bounce": "none"
+				} 
+			}
+    },
 		{
       "path": "pages/promotion/add",
       "style": {
         "navigationBarTitleText": "发布推广",
+        "app-plus": {
+					"bounce": "none"
+				} 
+      }
+    },
+    {
+      "path": "pages/promotion/edit",
+      "style": {
+        "navigationBarTitleText": "编辑推广",
         "app-plus": {
 					"bounce": "none"
 				} 
@@ -206,7 +225,9 @@
 		{
       "path": "pages/vip/index",
       "style": {
-        "navigationBarTitleText": "vip会员"
+        "navigationBarTitleText": "VIP会员",
+        "navigationBarBackgroundColor": "#3c9cff",
+        "navigationBarTextStyle": "white"
       }
     },
     {

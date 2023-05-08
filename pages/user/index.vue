@@ -77,9 +77,9 @@
 							title="我的推广"
 							:isLink="true" 
 							size="large"
+							url="/pages/promotion/me"
 							:iconStyle="{ color: '#3c9cff', fontSize: '22px'}"
 							:titleStyle="{ fontSize: '15px' }"
-							@click="linkToPromotion"
 						/>
 						<u-cell 
 							icon="star-fill" 
@@ -131,10 +131,10 @@
 				if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
       	if(res.data.code === 20000) Object.assign(this.numInfo, res.data.data)
 			},
-			linkToPromotion() {
-				uni.setStorage({ key: 'promotionActive', data: 2 })
-				uni.reLaunch({ url: '/pages/promotion/index' })
-			}
+			// linkToPromotion() {
+			// 	uni.setStorage({ key: 'promotionActive', data: 2 })
+			// 	uni.reLaunch({ url: '/pages/promotion/index' })
+			// }
 		}
 	}
 </script>

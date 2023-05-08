@@ -1,3 +1,3 @@
-iosProfile=/Users/kongzi/黎明工作室/云畅搜/证书文件/ycsappprofile.mobileprovision
-ioscertFile=/Users/kongzi/黎明工作室/云畅搜/证书文件/ios_development1.p12
+iosProfile=/Users/kongzi/黎明工作室/云畅搜/ios_prod/ysqcappprod.mobileprovision
+ioscertFile=/Users/kongzi/黎明工作室/云畅搜/ios_prod/ios_distribution2.p12
 ioscertPassword=ecwESCbp45Jz1Bl+sGiWtw==

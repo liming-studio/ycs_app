@@ -178,6 +178,9 @@
 .bg-primary {
     background-color: #3c9cff;
 }
+.bg-primary-10 {
+    background-color: rgba(60, 156, 255, 0.02);
+}
 .bg-warning {
     background-color: #f9ae3d;
 }
@@ -193,12 +196,19 @@
 .border-gray-300 {
     border-color: #c0c4cc
 }
+.border-orange-600 {
+    border-color: #ea580c
+}
 .border-primary {
     border-color: #3c9cff
 }
 
 .opacity-80 {
     opacity: 0.8;
+}
+
+.opacity-90 {
+    opacity: 0.9;
 }
 
 // text拓展
