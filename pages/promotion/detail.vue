@@ -37,6 +37,23 @@
               <text class="text-gray-500">{{ message.contact }}</text>
             </view>
           </view>
+          <view 
+            v-if="user.id === message.userid"
+            class="shrink-0"
+          >
+            <u-icon name="more-dot-fill" size="20" color="#303133" @click="actions.show = true" />
+            <u-action-sheet 
+              :show="actions.show"
+              :actions="actions.list" 
+              :round="16"
+              :closeOnClickOverlay="true" 
+              :closeOnClickAction="true"
+              cancelText="取消"
+              @close="actions.show = false"
+              @select="handleSelect"
+            >
+            </u-action-sheet>
+          </view>
         </view>
         <view class="mt-20 text-xl font-bold">{{ message.title }}</view>
         <view class="mt-8 text-sm">
@@ -78,8 +95,16 @@
     },
     data() {
       return {
+        user: uni.getStorageSync('user'),
         showLoading: true,
         showEmpty: false,
+        actions: {
+          show: false,
+          list: [
+            { name: '编辑', key: 'edit' },
+            { name: '删除', key: 'remove' }
+          ]
+        },
         message: {
           id: null,
           industryid: null,
@@ -110,6 +135,34 @@
           this.showLoading = false
         }, 300)
       },
+      handleSelect(e) {
+        if(e.key === 'edit') {
+
+        }
+        if(e.key === 'remove') {
+          uni.showModal({
+            title: '提示',
+            content: '你确定要删除这条推广吗？',
+            icon: 'fail',
+            success: (res) => {
+              if(res.confirm) this.remove(this.message.id)
+            }
+          })
+        }
+      },
+      async remove(id) {
+        let pages = getCurrentPages()
+        let prePage = pages[pages.length - 2]
+				const res = await this.$api({ url: `/tuiguang/delete?id=${id}`})
+				if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
+				if(res.data.code === 20000) {
+					uni.$u.toast(res.data.msg)
+          prePage.init = true
+          this.$nextTick(() => {
+            uni.navigateBack({ delta: 1 })
+          })
+				}
+			}
     },
   }
 </script>

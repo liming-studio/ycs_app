@@ -144,6 +144,12 @@ export default {
           message: '请填写详细描述信息',
           trigger: ['blur', 'change']
         },
+        'images': {
+          type: 'array',
+          required: true,
+          message: '至少上传一张图片',
+          trigger: ['blur', 'change']
+        }
       }
     }
   },

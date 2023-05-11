@@ -181,11 +181,9 @@
 						ask
 					>
 						<template v-slot="{list}">
-							<view 
+							<navigator 
 								v-for="(item, index) in list" 
 								:key="index"
-							>
-							<navigator 
 								:url="'/pages/promotion/detail?id='+item.id" 
 								hover-class="none"
 							>
@@ -226,7 +224,6 @@
 									</view>
 								</view>
 							</navigator>
-							</view>
 						</template>
 					</base-pagination>
 				</view>
