@@ -17,6 +17,7 @@
           :key="index"
           class="w-full bg-white rounded-xs mb-12"
         >
+          {{ item }}
           <view class="pt-12 px-12 pb-4 flex items-end">
             <view class="flex-grow mr-8">
               <view class="text-lg">
@@ -76,7 +77,8 @@ export default {
       const res = await this.$api({ url: '/history/getDetail', data: {id: id} })
       if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
       if(res.data.code === 20000) Object.assign(this.message, res.data.data)
-      setTimeout(() => this.showLoading = false, 200)
+      this.$nextTick(() => this.showLoading = false)
+      // setTimeout(() => this.showLoading = false, 200)
     },
     call(phoneNum) {
       uni.makePhoneCall({

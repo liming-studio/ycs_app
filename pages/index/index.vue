@@ -300,6 +300,7 @@
 }
 .bg-top-2 {
 	height: 25vh;
+	margin-top: -1px;
 	background: rgb(243,244,246);
 	background: linear-gradient(180deg, rgba(60,156,255,1) 0%, rgba(60,156,255,0.6) 60%,  rgba(243,244,246,1) 100%)
 

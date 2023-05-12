@@ -94,6 +94,7 @@
   export default {
     data() {
       return {
+        init: false,
         showLoading: true,
         showEmpty: false,
         screenHeight: '',
@@ -116,6 +117,14 @@
       this.getCardDetail()
       this.screenHeight = uni.getSystemInfoSync().windowHeight
     },
+    onShow() {
+			if(this.init) {
+        this.showLoading = true
+				this.init = false
+				uni.pageScrollTo({scrollTop: 0, duration: 0 })
+				this.getCardDetail()
+			}
+		},
     methods: {
       back() {
         uni.navigateBack()
@@ -127,7 +136,8 @@
           if(!res.data.data) this.showEmpty = true
           if(res.data.data) Object.assign(this.message, res.data.data)
         }
-        setTimeout(() => this.showLoading = false, 200)
+        this.$nextTick(() => this.showLoading = false)
+        // setTimeout(() => this.showLoading = false, 200)
       }
     },
   }

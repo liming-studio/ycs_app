@@ -1,7 +1,9 @@
 <template>
 	<view>
 		<view v-if="showPageLoading">
-			<u-loading-page :loading="showLoading" />
+			<view v-show="showLoading">
+				<slot name="loading" />
+			</view>
 		</view>
 		<view v-if="!showLoading">
 			<!-- list -->
@@ -102,7 +104,7 @@
 					this.finished = true
 				}
 				if(this.showPageLoading) {
-					setTimeout(() => this.showLoading = false, 150)
+					this.$nextTick(() => this.showLoading = false)
 				} else {
 					this.showLoading = false
 				}

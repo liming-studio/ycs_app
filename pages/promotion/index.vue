@@ -48,10 +48,22 @@
 			<base-pagination 
 				ref="paginationRef" 
 				url="/open/tuiguang/getPage" 
+				show-page-loading
 				:params="params"
 				:show-divider="false"
 				ask
 			>
+				<template v-slot:loading>
+					<view class="w-full h-400 flex-center flex-col">
+						<u-loading-icon 
+							text="加载中" 
+							mode="circle" 
+							textSize="16" 
+							size="32"
+							:vertical="true"
+						/>
+					</view>
+				</template>
 				<template v-slot="{list}">
 					<navigator 
 						v-for="(item, index) in list"
@@ -117,8 +129,20 @@
 				ref="paginationRef" 
 				url="/tuiguang/getMyPage"
 				:show-divider="false"
+				show-page-loading
 				ask
 			>
+				<template v-slot:loading>
+					<view class="w-full h-400 flex-center flex-col">
+						<u-loading-icon 
+							text="加载中" 
+							mode="circle" 
+							textSize="16" 
+							size="32"
+							:vertical="true"
+						/>
+					</view>
+				</template>
 				<template v-slot="{list}">
 					<view class="px-12">
 						<navigator 
@@ -211,17 +235,14 @@
 		},
 		onLoad(options) {
 			this.getTabs()
-			if(uni.getStorageSync("promotionActive")) {
-				this.active = uni.getStorageSync("promotionActive")
-			}
-			uni.setStorage({ key: 'promotionActive', data: 1 })
 		},
 		onShow() {
 			if(this.init) {
-				alert('a')
+				uni.showLoading({ title: '数据更新中……' })
 				this.init = false
 				uni.pageScrollTo({scrollTop: 0, duration: 0 })
 				this.$refs.paginationRef.askApi(false)
+				this.$nextTick(() => uni.hideLoading())
 			}
 		},
 		methods: {

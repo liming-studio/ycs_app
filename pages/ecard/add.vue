@@ -198,7 +198,8 @@
         const res = await this.$api({ url: '/open/industry/getList'})
         if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
         if(res.data.code === 20000) this.industry.list = [res.data.data]
-        setTimeout(() => this.showLoading = false, 100)
+        this.$nextTick(() => this.showLoading = false)
+        // setTimeout(() => this.showLoading = false, 100)
       },
       // 选择行业
       confirmIndustry({value}) {
@@ -266,7 +267,6 @@
       async add(data) {
         const res = await this.$api({ method: 'POST', url: '/card/updateCard', data: data })
         uni.$u.toast(res.data.msg)
-        uni.setStorage({ key: 'promotionActive', data: 2 }) // 1推荐 2我的推广
         uni.reLaunch({
           url: '/pages/ecard/index'
         })

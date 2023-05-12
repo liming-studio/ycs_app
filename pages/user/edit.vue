@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import { isNonEmptyArray } from '@/utils/tool.js'
 export default {
   data() {
     return {
@@ -80,7 +81,8 @@ export default {
         this.form.name = res.data.data.name
         // this.form.mobile = res.data.mobile
       }
-      setTimeout(() => this.showLoading = false, 200)
+      this.$nextTick(() => this.showLoading = false)
+      // setTimeout(() => this.showLoading = false, 200)
     },
      // 删除图片
      deletePic(event) {
@@ -120,8 +122,8 @@ export default {
       const res = await this.$api({ 
         url: '/user/updateThumbnail', 
         data: {
-          thumbnail: this.form.thumbnail && this.form.thumbnail.length > 0 ? this.form.thumbnail[0] : '',      
-          name:  this.form.name,   
+          thumbnail: isNonEmptyArray(this.form.thumbnail) ? this.form.thumbnail[0] : '',      
+          name:  this.form.name
         } 
       })
       uni.$u.toast(res.data.msg)

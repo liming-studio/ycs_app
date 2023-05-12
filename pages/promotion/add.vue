@@ -80,10 +80,17 @@
         </u-form-item>
       </u-form>
       <view class="mt-48">
-        <u-button type="primary" shape="circle"  @click="submit">提交</u-button>
+        <u-button 
+          type="primary" 
+          shape="circle"
+          :disabled="btnDisabled"
+          @click="submit"
+        >
+          提交
+        </u-button>
       </view>
-      <u-picker 
-        :show="industry.show" 
+      <u-picker
+        :show="industry.show"
         :columns="industry.list"
         keyName="name"
         @cancel="industry.show = false"
@@ -99,6 +106,7 @@ export default {
     return {
       showLoading: true,
       fileList1: [],
+      btnDisabled: false,
       industry: {
         show: false,
         list: [],
@@ -162,7 +170,8 @@ export default {
       const res = await this.$api({ url: '/open/industry/getList'})
       if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
       if(res.data.code === 20000) this.industry.list = [res.data.data]
-      setTimeout(() => this.showLoading = false, 100)
+      this.$nextTick(() => this.showLoading = false)
+      // setTimeout(() => this.showLoading = false, 100)
     },
     // 选择行业
     confirmIndustry({value}) {
@@ -197,16 +206,22 @@ export default {
         }))
         fileListLen++
       }
+      this.$nextTick(() => this.btnDisabled = false)
+      // setTimeout(() => this.btnDisabled = false, 300)
     },
     async uploadFilePromise(path) {
+      this.btnDisabled = true
       const res = await this.$upload({url: '/open/addpic', filePath: path})
       let data = JSON.parse(res.data)
       if(data.code !== 20000) uni.$u.toast(data.msg)
       if(data.code === 20000) this.form.images.push(data.data)
+      this.$nextTick(() => this.btnDisabled = false)
     },
     // 提交
     submit() {
 			this.$refs.uForm.validate().then(res => {
+        this.btnDisabled = true
+        uni.showLoading({ title: '上传中' })
         this.add({
           companyname: this.form.companyname,
           contact: this.form.contact,    
@@ -217,16 +232,24 @@ export default {
           level: this.form.level     
         })
 			}).catch(errors => {
+        uni.hideLoading()
 				uni.$u.toast('填写信息不完整')
 			})
 		},
     async add(data) {
+      let pages = getCurrentPages()
+      let prePage = pages[pages.length - 2]
       const res = await this.$api({ url: '/tuiguang/add', data: data })
       uni.$u.toast(res.data.msg)
-      uni.setStorage({ key: 'promotionActive', data: 2 }) // 1推荐 2我的推广
-      uni.reLaunch({
-        url: '/pages/promotion/index'
-      })
+      if(res.data.code === 20000) {
+        prePage.init = true
+        this.$nextTick(() => {
+          uni.hideLoading()
+          this.btnDisabled = false
+          uni.$u.toast('上传成功')
+          uni.navigateBack({ delta: 1 })
+        })
+      }
     }
   }
 }

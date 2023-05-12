@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<web-view src="http://www.jnysqc.com:8080/open/ystk"/>
+		<web-view src="https://www.jnysqc.com/open/ystk"/>
 	</view>
 </template>
 

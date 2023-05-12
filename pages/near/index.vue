@@ -117,10 +117,15 @@
           }
         })
       },
-      handleSearch: throttle(function(value) {
-        uni.showLoading({ title: '采集中' })
-        this.toSearch(value)
-      }, 1500, {leading: true, trailing: false}),
+      handleSearch: throttle(
+        function(value) {
+          uni.showLoading({ title: '采集中' })
+          this.toSearch(value)
+        }, 1500, {
+          leading: true, 
+          trailing: false
+        }
+      ),
       async toSearch(value) {
         const res = await this.$api({ url: '/map/getNearByList',  data: this.params })
         if(res.data.code !== 20000) {

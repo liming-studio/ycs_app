@@ -29,7 +29,7 @@
 							class="w-full h-90 flex items-center"
 						>
 							<view class="shrink-0 w-60 mr-12">
-								<u-avatar :src="userInfo.thumbnail" size="60" />
+								<u-avatar :src="userInfo.thumbnail" mode="cover" size="60" />
 							</view>
 							<view class="grow w-full mr-12">
 								<view class="flex items-center">
@@ -124,17 +124,14 @@
 				const res = await this.$api({ url: '/user/getMyInfo' })
 				if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
       	if(res.data.code === 20000) Object.assign(this.userInfo, res.data.data)
-				setTimeout(() => this.showLoading = false, 200)
+				this.$nextTick(() => this.showLoading = false)
+				// setTimeout(() => this.showLoading = false, 200)
 			},
 			async getNum() {
 				const res = await this.$api({ url: '/user/getNum' })
 				if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
       	if(res.data.code === 20000) Object.assign(this.numInfo, res.data.data)
-			},
-			// linkToPromotion() {
-			// 	uni.setStorage({ key: 'promotionActive', data: 2 })
-			// 	uni.reLaunch({ url: '/pages/promotion/index' })
-			// }
+			}
 		}
 	}
 </script>

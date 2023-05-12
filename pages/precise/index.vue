@@ -10,12 +10,21 @@
             placeholder="选择地址"
             :border="false"
             :map="{
-              text: 'name',
-              value: 'name'
+              text: 'value',
+              value: 'value'
             }"
             popup-title="请选择所在地区"
             @change="changeArea"
-          />
+          >
+            <view v-if="params.region" class="pl-6 pr-12 flex items-center">
+              <text class="text-sm text-gray-700">{{ params.region }}</text>
+              <u-icon name="arrow-down-fill" size="12" color="#909193" />
+            </view>
+            <view v-else class="pl-6 pr-12 flex items-center">
+              <view class="text-sm text-gray-700 mr-1">请选择</view>
+              <u-icon name="arrow-down-fill" size="12" color="#909193" />
+            </view>
+          </uni-data-picker>
         </view>
         <!-- 搜索 -->
         <u-search 
@@ -113,13 +122,18 @@
     },
     methods: {
       async getCityList() {
-        const res = await this.$api({ url: '/open/map/getCityList' })
+        const res = await this.$api({ url: '/open/map/getCityList111' })
         this.areaList = res.data.data
       },
-      handleSearch: throttle(function(value) {
-        uni.showLoading({ title: '采集中' })
-        this.toSearch(value)
-      }, 1500, {leading: true, trailing: false}),
+      handleSearch: throttle(
+        function(value) {
+          uni.showLoading({ title: '采集中' })
+          this.toSearch(value)
+        }, 1500, { 
+          leading: true, 
+          trailing: false 
+        }
+      ),
       async toSearch(value) {
         const res = await this.$api({ url: '/map/getMapList',  data: this.params })
         if(res.data.code !== 20000) {

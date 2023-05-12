@@ -15,8 +15,8 @@
         <text class="text-gray-500">共检索信息</text>
         <text class="text-primary px-4 font-bold">{{ list.length }}</text>
         <text class="text-gray-500">条</text>
-        <text 
-          v-if="list.length > 0" 
+        <text
+          v-if="list.length > 0"
           class="text-gray-500"
         >
           ，请前往客源管理查看
@@ -105,7 +105,7 @@
           setTimeout(() => {
             uni.hideLoading()
             uni.$u.toast(res.data.msg)
-          }, 1000)
+          }, 800)
         }
         if(res.data.code === 20000) {
           setTimeout(() => {
@@ -113,7 +113,7 @@
             this.list = res.data.data
             uni.hideLoading()
             uni.$u.toast(`采集结束，共${res.data.data.length}条数据`)
-          }, 1000)
+          }, 800)
         }
       },
       toCustomer() {

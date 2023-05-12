@@ -124,7 +124,14 @@
         </u-form-item>
       </u-form>
       <view class="mt-48">
-        <u-button type="primary" shape="circle"  @click="submit">提交</u-button>
+        <u-button 
+          type="primary" 
+          shape="circle" 
+          :disabled="btnDisabled"
+          @click="submit"
+        >
+          提交
+        </u-button>
       </view>
       <u-picker 
         :show="industry.show" 
@@ -138,10 +145,12 @@
 </template>
 
 <script>
+  import { isNonEmptyArray } from '@/utils/tool.js'
   export default {
     data() {
       return {
         showLoading: true,
+        btnDisabled: false,
         fileList1: [],    // 头像
         fileList2: [],
         industry: {
@@ -191,6 +200,12 @@
             required: true,
             message: '请选择公司主营业务',
             trigger: ['blur', 'change']
+          },
+          'companyaddress': {
+            type: 'string',
+            required: true,
+            message: '请输入公司地址',
+            trigger: ['blur', 'change']
           }
         }
       }
@@ -205,8 +220,8 @@
         const res = await this.$api({ url: '/card/getDetail' })
         if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
         if(res.data.code === 20000) {
-          this.fileList1 = [{ url: JSON.parse(res.data.data.thumbnail)[0] }]
-          this.fileList2 = [{ url: JSON.parse(res.data.data.wechat)[0] }]
+          this.fileList1 = isNonEmptyArray(JSON.parse(res.data.data.thumbnail)) ? [{ url: JSON.parse(res.data.data.thumbnail)[0] }] : []
+          this.fileList2 = isNonEmptyArray(JSON.parse(res.data.data.wechat)) ? [{ url: JSON.parse(res.data.data.wechat)[0] }] : []
           this.form.thumbnail = JSON.parse(res.data.data.thumbnail)
           this.form.name = res.data.data.name
           this.form.mobile = res.data.data.mobile
@@ -219,7 +234,8 @@
           this.industry.selText = res.data.data.industry
           this.form.wechat = JSON.parse(res.data.data.wechat)
         }
-        setTimeout(() => this.showLoading = false, 100)
+        this.$nextTick(() => this.showLoading = false)
+        // setTimeout(() => this.showLoading = false, 100)
       },
       // 获取所有行业
       async getIndustryList() {
@@ -263,17 +279,22 @@
         }
       },
       async uploadFilePromise(path, name) {
+        this.btnDisabled = true
         const res = await this.$upload({url: '/open/addpic', filePath: path})
         let data = JSON.parse(res.data)
         if(data.code !== 20000) uni.$u.toast(data.msg)
         if(data.code === 20000) {
+          console.log(name, data)
           if(name === '1') this.form.thumbnail.push(data.data)
           if(name === '2') this.form.wechat.push(data.data)
         }
+        this.$nextTick(() => this.btnDisabled = false)
       },
       // 提交
       submit() {
+        this.btnDisabled = true
         this.$refs.uForm.validate().then(res => {
+          uni.showLoading({ title: '上传中' })
           this.edit({            
             thumbnail: JSON.stringify(this.form.thumbnail),      
             name:  this.form.name,           
@@ -291,12 +312,19 @@
         })
       },
       async edit(data) {
+        let pages = getCurrentPages()
+        let prePage = pages[pages.length - 2]
         const res = await this.$api({ method: 'POST', url: '/card/updateCard', data: data })
         uni.$u.toast(res.data.msg)
-        uni.setStorage({ key: 'promotionActive', data: 2 }) // 1推荐 2我的推广
-        uni.reLaunch({
-          url: '/pages/ecard/index'
-        })
+        if(res.data.code === 20000) {
+          prePage.init = true
+          uni.hideLoading()
+          uni.$u.toast('修改成功')
+          this.$nextTick(() => {
+            this.btnDisabled = false
+            uni.navigateBack({ delta: 1 })
+          })
+        }
       }
     },
   }

@@ -15,7 +15,7 @@
     </view>
     <!-- 最近搜索 -->
     <view 
-      v-if="historyTags && historyTags.length > 0" 
+      v-if="isNonEmptyArray(historyTags)"
       class="p-16"
     >
       <view class="flex items-center justify-between">
@@ -57,6 +57,7 @@
 </template>
 <script>
   import { uniq } from 'lodash'
+  import { isNonEmptyArray } from '@/utils/tool.js'
 	export default {
 		data() {
 			return {

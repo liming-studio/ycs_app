@@ -90,11 +90,9 @@
 
 <script>
   export default {
-    onLoad(options) {
-      this.getDetail(options.id)
-    },
     data() {
       return {
+        init: false,
         user: uni.getStorageSync('user'),
         showLoading: true,
         showEmpty: false,
@@ -123,6 +121,17 @@
         }
       }
     },
+    onLoad(options) {
+      this.getDetail(options.id)
+    },
+    onShow() {
+			if(this.init) {
+        this.showLoading = true
+				this.init = false
+				uni.pageScrollTo({scrollTop: 0, duration: 0 })
+				this.getDetail(this.message.id)
+			}
+		},
     methods: {
       async getDetail(id) {
         const res = await this.$api({ url: '/open/tuiguang/getDetail', data: { id: id } })
@@ -131,13 +140,13 @@
           uni.$u.toast(res.data.msg)
           this.showEmpty = true
         }
-        setTimeout(() => {
-          this.showLoading = false
-        }, 300)
+        this.$nextTick(() => this.showLoading = false)
       },
       handleSelect(e) {
         if(e.key === 'edit') {
-
+          uni.navigateTo({
+            url: `/pages/promotion/edit?id=${this.message.id}`
+          })
         }
         if(e.key === 'remove') {
           uni.showModal({

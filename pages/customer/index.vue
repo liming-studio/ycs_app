@@ -22,12 +22,23 @@
 				/>
 			</view>
 			<view class="p-12">
-				<base-pagination 
+				<base-pagination
 					ref="paginationRef" 
 					url="/history/getPage"
 					:params="params"
 					show-page-loading
 				>
+					<template v-slot:loading>
+						<view class="w-full h-400 flex-center flex-col">
+							<u-loading-icon 
+								text="加载中" 
+								mode="circle" 
+								textSize="16" 
+								size="32"
+								:vertical="true"
+							/>
+						</view>
+					</template>
 					<template v-slot="{list}">
 						<navigator 
 							v-for="(item, index) in list" 
