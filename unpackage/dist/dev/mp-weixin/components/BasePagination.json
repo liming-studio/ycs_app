@@ -1,0 +1,11 @@
+{
+  "componentGenerics": {
+    "scoped-slots-default": true
+  },
+  "component": true,
+  "usingComponents": {
+    "u-loading-icon": "/uni_modules/uview-ui/components/u-loading-icon/u-loading-icon",
+    "u-divider": "/uni_modules/uview-ui/components/u-divider/u-divider",
+    "u-empty": "/uni_modules/uview-ui/components/u-empty/u-empty"
+  }
+}

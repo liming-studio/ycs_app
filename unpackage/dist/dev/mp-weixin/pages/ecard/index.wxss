@@ -1,0 +1,6 @@
+
+.bg-main.data-v-a1d5f162 {
+  background: rgb(236,236,236);
+  background: linear-gradient(180deg, rgba(236,236,236,1) 0%, rgba(192,239,242,1) 25%, rgba(250,243,252,1) 70%);
+} 
+

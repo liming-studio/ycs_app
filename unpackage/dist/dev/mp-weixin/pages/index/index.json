@@ -1,0 +1,16 @@
+{
+  "usingComponents": {
+    "index-base-pagination-default": "/pages/index/index-base-pagination-default",
+    "u-icon": "/uni_modules/uview-ui/components/u-icon/u-icon",
+    "u-button": "/uni_modules/uview-ui/components/u-button/u-button",
+    "u-grid": "/uni_modules/uview-ui/components/u-grid/u-grid",
+    "u-grid-item": "/uni_modules/uview-ui/components/u-grid-item/u-grid-item",
+    "u-image": "/uni_modules/uview-ui/components/u-image/u-image",
+    "u-swiper": "/uni_modules/uview-ui/components/u-swiper/u-swiper",
+    "u-loading-icon": "/uni_modules/uview-ui/components/u-loading-icon/u-loading-icon",
+    "u-line": "/uni_modules/uview-ui/components/u-line/u-line",
+    "u-avatar": "/uni_modules/uview-ui/components/u-avatar/u-avatar",
+    "u-back-top": "/uni_modules/uview-ui/components/u-back-top/u-back-top",
+    "base-pagination": "/components/BasePagination"
+  }
+}

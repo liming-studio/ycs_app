@@ -1,0 +1,14 @@
+{
+  "navigationBarTitleText": "发布推广",
+  "usingComponents": {
+    "u-loading-page": "/uni_modules/uview-ui/components/u-loading-page/u-loading-page",
+    "u-form": "/uni_modules/uview-ui/components/u-form/u-form",
+    "u-form-item": "/uni_modules/uview-ui/components/u-form-item/u-form-item",
+    "u-input": "/uni_modules/uview-ui/components/u-input/u-input",
+    "u-icon": "/uni_modules/uview-ui/components/u-icon/u-icon",
+    "u-textarea": "/uni_modules/uview-ui/components/u-textarea/u-textarea",
+    "u-upload": "/uni_modules/uview-ui/components/u-upload/u-upload",
+    "u-button": "/uni_modules/uview-ui/components/u-button/u-button",
+    "u-picker": "/uni_modules/uview-ui/components/u-picker/u-picker"
+  }
+}

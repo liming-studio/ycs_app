@@ -13,7 +13,7 @@ export default {
 		setTimeout(function() {
 			wv = currentWebview.children()[0]
 			wv.setStyle({
-        top:0,
+        top: 0,
       })
 		}, 1000); // 如果是页面初始化调用时，需要延时一下
 		// #endif

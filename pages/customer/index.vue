@@ -124,6 +124,7 @@
 				const res = await this.$api({ url: '/history/delete', data: {id: id} })
 				if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
 				if(res.data.code === 20000) {
+					this.$refs.paginationRef.showLoading = true
 					this.$refs.paginationRef.askApi(false)
 					uni.$u.toast(res.data.msg)
         }

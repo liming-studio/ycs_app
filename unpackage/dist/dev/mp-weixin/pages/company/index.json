@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "企查拓客",
+  "usingComponents": {
+    "u-search": "/uni_modules/uview-ui/components/u-search/u-search",
+    "u-empty": "/uni_modules/uview-ui/components/u-empty/u-empty",
+    "u-line": "/uni_modules/uview-ui/components/u-line/u-line",
+    "u-divider": "/uni_modules/uview-ui/components/u-divider/u-divider",
+    "u-button": "/uni_modules/uview-ui/components/u-button/u-button"
+  }
+}

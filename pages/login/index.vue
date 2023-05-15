@@ -132,11 +132,11 @@ export default {
     }
   },
 	onLoad() {
-		if(uni.getStorageSync('token')) {
-			uni.switchTab({
-				url:'/pages/index/index'
-			})
-		}
+		// if(uni.getStorageSync('token')) {
+		// 	uni.switchTab({
+		// 		url:'/pages/index/index'
+		// 	})
+		// }
 	},
   methods: {
 		// 切换登录状态

@@ -1,0 +1,18 @@
+{
+  "component": true,
+  "usingComponents": {
+    "index-base-pagination-default": "/pages/promotion/index-base-pagination-default",
+    "index-base-pagination-default1": "/pages/promotion/index-base-pagination-default1",
+    "u-navbar": "/uni_modules/uview-ui/components/u-navbar/u-navbar",
+    "u-button": "/uni_modules/uview-ui/components/u-button/u-button",
+    "u-swiper": "/uni_modules/uview-ui/components/u-swiper/u-swiper",
+    "u-gap": "/uni_modules/uview-ui/components/u-gap/u-gap",
+    "u-tabs": "/uni_modules/uview-ui/components/u-tabs/u-tabs",
+    "u-loading-icon": "/uni_modules/uview-ui/components/u-loading-icon/u-loading-icon",
+    "u-avatar": "/uni_modules/uview-ui/components/u-avatar/u-avatar",
+    "u-image": "/uni_modules/uview-ui/components/u-image/u-image",
+    "u-icon": "/uni_modules/uview-ui/components/u-icon/u-icon",
+    "u-line": "/uni_modules/uview-ui/components/u-line/u-line",
+    "base-pagination": "/components/BasePagination"
+  }
+}

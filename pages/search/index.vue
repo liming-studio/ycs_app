@@ -21,7 +21,7 @@
       <view class="flex items-center justify-between">
         <view>最近搜索</view>
         <view class="px-2">
-          <u-icon name="trash" color="#909193" size="20"></u-icon>
+          <u-icon name="trash" color="#909193" size="20" />
         </view>
       </view>
       <view class="mt-8 py-4 flex flex-wrap">
@@ -61,6 +61,7 @@
 	export default {
 		data() {
 			return {
+        isNonEmptyArray: isNonEmptyArray,
 				keyword: '',
         searchType: '',
         historyTags: [],

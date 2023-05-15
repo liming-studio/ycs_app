@@ -1,0 +1,8 @@
+
+.bg-top.data-v-137d5072 {
+  background: #3c9cff;
+  height: 20vh;
+  border-bottom-left-radius: 50% 20%;
+  border-bottom-right-radius: 50% 20%;
+}
+

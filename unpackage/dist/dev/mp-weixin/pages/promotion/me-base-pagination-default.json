@@ -1,0 +1,14 @@
+{
+  "component": true,
+  "usingComponents": {
+    "me-base-pagination-default": "/pages/promotion/me-base-pagination-default",
+    "u-navbar": "/uni_modules/uview-ui/components/u-navbar/u-navbar",
+    "u-button": "/uni_modules/uview-ui/components/u-button/u-button",
+    "u-image": "/uni_modules/uview-ui/components/u-image/u-image",
+    "u-loading-icon": "/uni_modules/uview-ui/components/u-loading-icon/u-loading-icon",
+    "u-line": "/uni_modules/uview-ui/components/u-line/u-line",
+    "u-avatar": "/uni_modules/uview-ui/components/u-avatar/u-avatar",
+    "u-icon": "/uni_modules/uview-ui/components/u-icon/u-icon",
+    "base-pagination": "/components/BasePagination"
+  }
+}

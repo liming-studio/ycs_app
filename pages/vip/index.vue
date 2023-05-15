@@ -63,7 +63,12 @@
           </u-radio-group>
         </view>
         <view class="mt-32 px-8">
-          <u-button text="立即开通" type="primary" shape="circle"></u-button>
+          <u-button 
+            text="立即开通" 
+            type="primary" 
+            shape="circle"
+            @click="toPay"
+          />
         </view>
       </view>
     </view>
@@ -109,6 +114,30 @@ export default {
       this.$nextTick(() => {
         this.showLoading = false
       })
+    },
+    async toPay() {
+      const res = await this.$api({ url: '/user/aliPay' })
+      if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
+      if(res.data.code === 20000) {
+        uni.requestPayment({
+          provider: 'alipay',
+          orderInfo: res.data.data.resdata, //支付宝订单数据
+          success: function (res) {
+            uni.showModal({
+              content: '您成功了，你是vip了',  
+              showCancel: false  
+            })
+              console.log('success:' + JSON.stringify(res))
+          },
+          fail: function (err) {
+            uni.showModal({
+              content: '你是胆小鬼',  
+              showCancel: false  
+            })
+              console.log('fail:' + JSON.stringify(err))
+          }
+        })
+      }
     }
   }
 }
