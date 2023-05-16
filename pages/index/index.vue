@@ -23,10 +23,10 @@
 						<view 
 							class="w-full h-32 bg-white rounded-sm flex items-center px-8"
 							:style="searchStyle"
-							@click="toSearch"
+							@click="navigateTo('/pages/precise/index')"
 						>
 							<u-icon name="search" size="20" color="#3c9cff" />
-							<view class="ml-4 text-gray-300">请输入关键词</view>
+							<view class="ml-4 text-gray-500">请输入关键词</view>
 						</view>
 					</view>
 					<navigator 
@@ -51,65 +51,60 @@
 				<!-- search -->
 					<view 
 					class="w-full h-42 rounded-2xl bg-white flex items-center px-14"
-					@click="toSearch"	
+					@click="navigateTo('/pages/precise/index')"	
 				>
 					<u-icon name="search" size="24" color="#909193" />
-					<view class="ml-8 text-gray-300">请输入关键词</view>
+					<view class="ml-8 text-gray-500">请输入关键词</view>
 				</view>
 				<!-- kingkong -->
 				<u-grid  :border="false" col="4" class="mt-12">
 					<!-- 精准拓客 -->
 					<u-grid-item>
-						<navigator 
-							url="/pages/precise/index" 
-							hover-class="none" 
+						<view 
 							class="flex flex-col items-center"
+							@click="navigateTo('/pages/precise/index')"
 						>
 							<image src="/static/kingkong/target-icon.png" class="w-40 h-40" />
 							<text class="grid-text">精准拓客</text>
-						</navigator>
+						</view>
 					</u-grid-item>
 					<!-- 附近拓客 -->
 					<u-grid-item>
-						<navigator 
-							url="/pages/near/index" 
-							hover-class="none" 
+						<view 
 							class="flex flex-col items-center"
+							@click="navigateTo('/pages/near/index')"
 						>
 							<image src="/static/kingkong/location-icon.png" class="w-40 h-40" />
 							<text class="grid-text">附近拓客</text>
-						</navigator>
+						</view>
 					</u-grid-item>
 					<!-- 企查拓客 -->
 					<u-grid-item>
-						<navigator 
-							url="/pages/company/index" 
-							hover-class="none" 
+						<view 
 							class="flex flex-col items-center"
+							@click="navigateTo('/pages/company/index')"
 						>
 							<image src="/static/kingkong/suitcase-icon.png" class="w-40 h-40" />
 							<text class="grid-text">企查拓客</text>
-						</navigator>
+						</view>
 					</u-grid-item>
 					<!-- 电子名片 -->
 					<u-grid-item>
-						<navigator 
-							url="/pages/ecard/index" 
-							hover-class="none" 
+						<view 
 							class="flex flex-col items-center"
+							@click="navigateTo('/pages/ecard/index')"
 						>
 							<image src="/static/kingkong/man-icon.png" class="w-50 h-40" />
 							<text class="grid-text">电子名片</text>
-						</navigator>
+						</view>
 					</u-grid-item>
 				</u-grid>
 				<!-- kingkogn2 -->
 				<view class="mt-8 w-full h-160 bg-white rounded-lg flex items-center p-12">
 					<!-- 附近拓客 -->
-					<navigator 
-						url="/pages/near/index" 
-						hover-class="none" 
+					<view 
 						class="shrink-0 w-160 h-full rounded-sm relative"
+						@click="navigateTo('/pages/near/index')"
 					>
 						<view class="absolute inset-0 z-10 rounded-sm bg-primary bg-linear-near p-12">
 							<view class="text-lg text-sky-600">附近拓客</view>
@@ -126,13 +121,12 @@
 						<view class="w-155 h-136 rounded-sm overflow-hidden">
 							<u-image src="/static/kingkong/near-icon.jpeg" width="320rpx" height="272rpx" />
 						</view>
-					</navigator>
+					</view>
 					<view class="ml-8 grow w-full h-full flex flex-col">
 						<!-- 企业查询 -->
-						<navigator 
-							url="/pages/company/index" 
-							hover-class="none" 
+						<view
 							class="w-full h-full rounded-sm relative"
+							@click="navigateTo('/pages/company/index')"
 						>
 							<view class="absolute inset-0 z-10 rounded-sm bg-primary bg-linear-near px-12 py-8">
 								<view class="text-lg text-sky-600">企业查询</view>
@@ -141,12 +135,11 @@
 							<view class="w-full h-136 rounded-sm overflow-hidden text-right">
 								<u-image src="/static/kingkong/business-icon.jpeg" width="308rpx" height="130rpx" radius="8" />
 							</view>
-						</navigator>
+						</view>
 						<!-- 精准拓客 -->
-						<navigator 
-							url="/pages/precise/index" 
-							hover-class="none" 
+						<view 
 							class="mt-8 w-full h-full rounded-sm relative"
+							@click="navigateTo('/pages/precise/index')"
 						>
 							<view class="absolute inset-0 z-10 rounded-sm bg-primary bg-linear-near px-12 py-8">
 								<view class="text-lg text-sky-600">精准搜索</view>
@@ -155,7 +148,7 @@
 							<view class="w-full h-136 rounded-sm overflow-hidden text-right">
 								<u-image src="/static/kingkong/precision-icon.jpeg" width="308rpx" height="130rpx" radius="8" />
 							</view>
-						</navigator>
+						</view>
 					</view>
 				</view>
 				<!-- banner -->
@@ -247,12 +240,18 @@
 		},
 		data() {
 			return {
-				headerOpacity: 0, 							// 导航栏透明度变量
+				headerOpacity: 0, // 导航栏透明度变量
 				scrollTop: 0,
 				bannerList: [
 					'https://cdn.uviewui.com/uview/swiper/swiper2.png',
 					'https://cdn.uviewui.com/uview/swiper/swiper3.png',
 				],
+				userInfo: {
+					name: '',
+					thumbnail: '',
+					mobile: '',
+					isvip: 0
+				},
 				kingkongList: [],
 				params: {}
 			}
@@ -281,12 +280,35 @@
 		},
 		onLoad() {
 		},
+		onShow() {
+			this.getUserInfo()
+		},
 		methods: {
-			toSearch() {
-				// uni.setStorage({ key: 'searchType', data: 'promotion' })
-				uni.navigateTo({
-					url: '/pages/precise/index'
-				})
+			async getUserInfo() {
+				const res = await this.$api({ url: '/user/getMyInfo' })
+				if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
+				if(res.data.code === 20000) Object.assign(this.userInfo, res.data.data)
+			},
+			navigateTo(url) {
+				if(!this.userInfo.isvip) {
+					uni.showModal({
+						title: '提示',
+						content: '抱歉，当前功能只针对VIP用户开放，请开通VIP后再试',
+						cancelText: '确定',
+						confirmText: '现在开通',
+						success: (res) => {
+							if(res.confirm) {
+								uni.navigateTo({
+									url: '/pages/vip/index'
+								})
+							}
+						}
+					})
+				} else {
+					uni.navigateTo({
+						url: url
+					})	
+				}
 			}
 		}
 	}

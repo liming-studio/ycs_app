@@ -116,9 +116,11 @@
 		},
 		onLoad() {
       this.screenHeight = uni.getSystemInfoSync().windowHeight
+    },
+		onShow() {
 			this.getUserInfo()
 			this.getNum()
-    },
+		},
 		methods: {
 			async getUserInfo() {
 				const res = await this.$api({ url: '/user/getMyInfo' })
