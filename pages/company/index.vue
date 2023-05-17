@@ -112,7 +112,7 @@
             this.showDefault = false
             this.list = res.data.data
             uni.hideLoading()
-            uni.$u.toast(`采集结束，共${res.data.data.length}条数据`)
+            uni.$u.toast(`采集结束，共为您找到${res.data.data.length}条数据`)
           }, 800)
         }
       },

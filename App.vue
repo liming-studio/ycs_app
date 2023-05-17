@@ -5,7 +5,7 @@
 			let token = uni.getStorageSync('token')
 			if(token) plus.navigator.closeSplashscreen()
 			if(!token) {
-				uni.relaunch({
+				uni.navigateTo({
 					url: "/pages/login/index",
 					success: () => {
 						plus.navigator.closeSplashscreen();

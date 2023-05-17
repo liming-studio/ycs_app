@@ -216,8 +216,6 @@ export default {
 			if (res.data.code == 20000) {
 				uni.setStorage({ key: 'token', data: res.data.data.token })
 				uni.setStorage({ key: 'user', data: res.data.data.user })
-				// uni.setStorage({ key: 'phone', data: res.data.data.mobile })
-				// uni.setStorage({ key: 'password', data: res.data.data.password })
 				setTimeout(() => {
 					uni.hideLoading()
 					uni.$u.toast('登录成功')

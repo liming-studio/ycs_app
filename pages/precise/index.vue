@@ -5,13 +5,13 @@
         <!-- 选择地区 -->
         <view class="shrink-0">
           <uni-data-picker
-            v-model="params.region"
+            v-model="areaCode"
             :localdata="areaList" 
             placeholder="选择地址"
             :border="false"
             :map="{
               text: 'value',
-              value: 'value'
+              value: 'code'
             }"
             popup-title="请选择所在地区"
             @change="changeArea"
@@ -29,7 +29,7 @@
         <!-- 搜索 -->
         <u-search 
           v-model="params.content"
-          placeholder="请输入搜索关键字"
+          placeholder="请输入关键字"
           shape="square"
           @search="handleSearch"
           @custom="handleSearch"
@@ -113,6 +113,7 @@
           region: '',
         },
         areaList: [],
+        areaCode: '',
         list: [],
         showDefault: true
       }
@@ -124,6 +125,9 @@
       async getCityList() {
         const res = await this.$api({ url: '/open/map/getCityList111' })
         this.areaList = res.data.data
+      },
+      changeArea(e) {
+        this.params.region = e.detail.value[2].text
       },
       handleSearch: throttle(
         function(value) {
@@ -147,7 +151,7 @@
             this.showDefault = false
             this.list = res.data.data
             uni.hideLoading()
-            uni.$u.toast(`采集结束，共${res.data.data.length}条数据`)
+            uni.$u.toast(`采集结束，共为您找到${res.data.data.length}条数据`)
           }, 1000)
         }
       },
@@ -155,9 +159,6 @@
         uni.reLaunch({
           url: '/pages/customer/index'
         })
-      },
-      changeArea() {
-        
       }
     }
   }

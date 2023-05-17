@@ -222,12 +222,13 @@ export default {
 				uni.$u.toast(res.data.msg)
 			}
 			if (res.data.code == 20000) {
-        uni.setStorage({ key: 'phone', data: this.formData.phone })
-				uni.$u.toast('注册成功')
+        uni.setStorage({ key: 'token', data: res.data.data.token })
+				uni.setStorage({ key: 'user', data: res.data.data.user })
+				uni.$u.toast('成功')
 				setTimeout(() => {
           uni.hideLoading()
 					this.btnDisabled = false
-          uni.reLaunch({ url: '/pages/login/index' })
+					uni.reLaunch({ url:"/pages/index/index"})
 				}, 200)
 			}
 		},
