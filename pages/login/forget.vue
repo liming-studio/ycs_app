@@ -1,6 +1,6 @@
 <template>
   <view class="w-full h-screen pt-navbar relative">
-    <u-navbar :autoBack="true" />
+    <u-navbar autoBack />
     <view class="px-24 py-16">
       <view class="text-2xl">设置新密码</view>
       <view class="mt-32">

@@ -3,10 +3,7 @@
     class="w-full pt-navbar bg-gray-100 relative"
 		:style="{minHeight: screenHeight + 'px'}"
   >
-    <u-navbar
-			title="我的推广"
-      :autoBack="true"
-		>
+    <u-navbar title="我的推广" autoBack>
 			<view slot="right">
 				<u-button text="发布推广" shape="circle" size="small" @click="addPromote" />
 			</view>

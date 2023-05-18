@@ -1,9 +1,6 @@
 <template>
   <view class="pt-navbar">
-    <u-navbar
-      :title="params.name"
-      :autoBack="true"
-    />
+    <u-navbar :title="params.name" autoBack />
     <base-pagination 
       ref="paginationRef" 
       url="/open/tuiguang/getPage"

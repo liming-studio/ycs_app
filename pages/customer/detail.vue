@@ -1,15 +1,12 @@
 <template>
   <view class="min-h-screen pt-navbar bg-gray-100">
-    <u-navbar
-			title="客源管理"
-			leftIcon=""
-		>
+    <u-navbar title="客源管理" autoBack>
 			<view slot="right">
-				<u-button 
-          :text="multiple ? '取消' : '操作'" 
-          shape="circle" 
-          size="small" 
-          @click="changeMultiple" 
+				<u-button
+          :text="multiple ? '取消' : '批量操作'"
+          shape="circle"
+          size="small"
+          @click="changeMultiple"
         />
 			</view>
 		</u-navbar>
@@ -68,10 +65,25 @@
                 </view>
               </view>
               <view class="pl-24 flex justify-end items-center">
-                <!-- 打电话 -->
+                <!-- 加微信 -->
                 <view 
                   v-if="item.phone"
                   class="ml-auto"
+                  @click="addWeChat(item.phone)"
+                >
+                  <u-button 
+                    icon="weixin-fill" 
+                    color="#04BE02"
+                    text="加微信"
+                    shape="circle"
+                    size="small" 
+                    plain
+                  />
+                </view>
+                <!-- 打电话 -->
+                <view 
+                  v-if="item.phone"
+                  class="ml-6"
                   @click="call(item.phone)"
                 >
                   <u-button 
@@ -91,7 +103,7 @@
                     shape="circle"
                     size="small"
                     plain
-                    @click="changeCollected(item)"
+                    @click="addCollected(item)"
                   />
                 </view>
               </view>
@@ -132,7 +144,13 @@
           </view>
           <view class="grow flex items-center justify-end">
             <view>
-              <u-button text="导入通讯录" type="primary" shape="circle" @click="addPhoneContact" />
+              <u-button
+                text="导入通讯录"
+                type="primary"
+                shape="circle"
+                :disabled="checkedList.length === 0"
+                @click="addPhoneContact" 
+              />
             </view>
           </view>
         </view>
@@ -213,7 +231,19 @@ export default {
         return { found: false, index: -1 }
       }
     },
-    
+    // 加微信（复制电话号码）
+    addWeChat(code) {
+      uni.setClipboardData({
+        data: code,
+        showToast: false,
+        success: function () {
+          uni.showToast({
+            icon:'none',
+            title: '复制成功，去微信添加吧'
+          })
+        }
+      })
+    },
     // 打电话
     call(phoneNum) {
       uni.makePhoneCall({
@@ -221,24 +251,26 @@ export default {
       })
     },
     // 收藏
-    changeCollected({collected, name, phone, address}) {
-      if(!collected) this.addCollected({name, phone, address})
-      if(collected) this.cancelCollected({name, phone, address})
-    },
+    // changeCollected({collected, name, phone, address}) {
+    //   if(!collected) this.addCollected({name, phone, address})
+    //   if(collected) this.cancelCollected({name, phone, address})
+    // },
     // 添加收藏
-    async addCollected(data) {
-      const res = await this.$api({ method: 'POST', url: '/user/addCollect', data: data })
-      if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
-      if(res.data.code === 20000) this.getDetail(this.message.id)
+    async addCollected({name, phone, address}) {
+      const res = await this.$api({ method: 'POST', url: '/user/addCollect', data: {name, phone, address} })
+      uni.$u.toast(res.data.msg)
+      // if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
+      // if(res.data.code === 20000) this.getDetail(this.message.id)
     },
     // 导入通讯录
     addPhoneContact() {
-      if(this.checkedList.length === 0) {
-        uni.showToast({ 
-          title: '至少选择一条数据'
-        })
-        return
-      }
+      // if(this.checkedList.length === 0) {
+      //   uni.showToast({
+      //     icon:'none',
+      //     title: '至少选择一条数据'
+      //   })
+      //   return
+      // }
       uni.showLoading({ title: '导入中' })
       let that = this
       this.checkedList.forEach((item, index) => {

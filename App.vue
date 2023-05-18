@@ -3,10 +3,10 @@
 		onLaunch: function() {
 			// #ifdef APP-PLUS
 			let token = uni.getStorageSync('token')
-			if(token) plus.navigator.closeSplashscreen()
-			if(!token) {
-				uni.navigateTo({
-					url: "/pages/login/index",
+			if(!token) plus.navigator.closeSplashscreen()
+			if(token) {
+				uni.reLaunch({
+					url: "/pages/index/index",
 					success: () => {
 						plus.navigator.closeSplashscreen();
 					}
