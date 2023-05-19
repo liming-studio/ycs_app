@@ -202,6 +202,12 @@
         "navigationBarTitleText": "企查拓客"
       }
     },
+    {
+      "path": "pages/company/detail",
+      "style": {
+        "navigationBarTitleText": "企查详情"
+      }
+    },
 		{
       "path": "pages/ecard/index",
       "style": {
@@ -230,6 +236,15 @@
         "navigationBarBackgroundColor": "#3c9cff",
         "navigationBarTextStyle": "white"
       }
+    },
+    {
+      "path": "pages/favorites/index",
+      "style": {
+				"app-plus": {
+					"titleNView": false,
+					"bounce": "none"
+				} 
+			}
     },
     {
       "path": "pages/agreement/index",

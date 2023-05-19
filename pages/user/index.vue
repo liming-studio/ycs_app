@@ -83,9 +83,10 @@
 						/>
 						<u-cell 
 							icon="star-fill" 
-							title="我的收藏" 
-							size="large"
+							title="我的收藏"
 							:isLink="true"
+							size="large"
+							url="/pages/favorites/index"
 							:iconStyle="{ color: '#3c9cff', fontSize: '20px'}"
 							:titleStyle="{ fontSize: '15px' }"
 						/>

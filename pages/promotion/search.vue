@@ -10,10 +10,10 @@
       ask
     >
       <template v-slot="{list}">
-        <navigator 
+        <navigator
           v-for="(item, index) in list"
           :key="index"
-          :url="'/pages/promotion/detail?id='+item.id" 
+          :url="'/pages/promotion/detail?id='+item.id"
           hover-class="none"
         >
           <view class="p-16">
@@ -24,7 +24,7 @@
               <view class="ml-10 grow">
                 <view class="flex items-center justify-between">
                   <view class="text-base">{{ item.companyname }}</view>
-                  <view 
+                  <view
                     v-if="item.level"
                     class="px-6 py-1 bg-error text-white text-xs rounded-xs"
                   >

@@ -20,7 +20,7 @@
     >
       <view class="flex items-center justify-between">
         <view>最近搜索</view>
-        <view class="px-2">
+        <view class="px-2" @click="clearHistoryTags">
           <u-icon name="trash" color="#909193" size="20" />
         </view>
       </view>
@@ -38,7 +38,7 @@
       </view>
     </view>
     <!-- 热门搜索 -->
-    <view class="p-16">
+    <!-- <view class="p-16">
       <view>热门搜索</view>
       <view class="mt-8 py-4 flex flex-wrap">
         <u-tag 
@@ -52,7 +52,7 @@
           @click="toSearch(tag)"
         />
       </view>
-    </view>
+    </view> -->
   </view>
 </template>
 <script>
@@ -65,7 +65,7 @@
 				keyword: '',
         searchType: '',
         historyTags: [],
-        hotTags: ['五金制品', '门窗卫浴', '建材家具', '微商电商', '糖酒食品', '鞋包服饰', '金融保险']
+        // hotTags: ['五金制品', '门窗卫浴', '建材家具', '微商电商', '糖酒食品', '鞋包服饰', '金融保险']
 			}
 		},
     onShow() {
@@ -73,15 +73,24 @@
       this.historyTags = uniq(uni.getStorageSync(`${uni.getStorageSync("searchType")}History`)) || []
     },
     methods: {
+      // 返回按钮
       back() {
         uni.navigateBack()
       },
+      // 清空历史搜索记录
+      clearHistoryTags() {
+        
+      },
+      // 搜索
       toSearch(value) {
         if(this.searchType === 'promotion') {
           uni.setStorage({ key: 'promotionHistory', data: [].concat(value, this.historyTags) })
           uni.redirectTo({ url: `/pages/promotion/search?text=${value}` })
         }
       }
+      /**
+        
+      **/
     }
 	}
 </script>

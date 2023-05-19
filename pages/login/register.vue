@@ -140,6 +140,7 @@
 <script>
 import { validatePhone } from '@/utils/validate.js'
 import { Encrypt } from '@/utils/crypto.js'
+import { throttle } from 'lodash'
 
 export default {
   data() {
@@ -173,23 +174,30 @@ export default {
 				this.captchaBtnText = text
 			}
 		},
-		getCode() {
-			// 拦截一些不合规的情况
-			if(!this.formData.phone) { uni.$u.toast('请输入手机号'); return }
-			if(!validatePhone(this.formData.phone)) { uni.$u.toast('手机号格式不正确'); return }
-			if(!this.$refs.uCode.canGetCode) { uni.$u.toast('倒计时结束后再发送'); return }
-			// 模拟向后端请求验证码
-			uni.showLoading({ title: '正在获取验证码' })
-			this.getCaptcha(this.formData.phone)
-			setTimeout(() => {
-				uni.hideLoading()
-				uni.$u.toast('验证码已发送')
-				this.$refs.uCode.start()
-			}, 2000)
-		},
+    getCode: throttle(
+			function() {
+				// 拦截一些不合规的情况
+				if(!this.formData.phone) { uni.$u.toast('请输入手机号'); return }
+				if(!validatePhone(this.formData.phone)) { uni.$u.toast('手机号格式不正确'); return }
+				if(!this.$refs.uCode.canGetCode) { uni.$u.toast('倒计时结束后再发送'); return }
+				// 模拟向后端请求验证码
+				uni.showLoading({ title: '正在获取验证码' })
+				this.getCaptcha(this.formData.phone)
+			}, 500, {
+        leading: true,
+        trailing: false
+      }
+		),
 		async getCaptcha(phone) {
 			const res = await this.$api({ url: '/open/sendCaptcha', data: { phone: phone } })
 			if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
+      if(res.data.code === 20000) {
+				this.$nextTick(() => {
+					uni.hideLoading()
+					uni.$u.toast('验证码已发送')
+					this.$refs.uCode.start()
+				})
+			}
 		},
     /******** 注册相关 ********/
     // 校验
@@ -199,13 +207,18 @@ export default {
 			return true
 		},
     // 提交信息
-		submit() {
-			if(this.validateForm()) {
-				uni.showLoading({ title: '注册中' })
-				this.btnDisabled = true
-				this.register()
-			}
-		},
+		submit: throttle(
+			function() {
+				if(this.validateForm()) {
+					uni.showLoading({ title: '注册中' })
+					this.btnDisabled = true
+					this.register()
+				}
+			}, 500, {
+        leading: true,
+        trailing: false
+      }
+		),
     // 注册
     async register() {
 			const res = await this.$api({

@@ -3,6 +3,7 @@
     <u-navbar title="客源管理" autoBack>
 			<view slot="right">
 				<u-button
+          v-if="message.num > 0 && message.type !== '企查拓客'"
           :text="multiple ? '取消' : '批量操作'"
           shape="circle"
           size="small"
@@ -96,7 +97,7 @@
                   />
                 </view>
                 <!-- 收藏 -->
-                <view class="ml-6">
+                <view v-if="message.type !== '企查拓客'" class="ml-6">
                   <u-button 
                     type="warning" 
                     text="收藏"
@@ -104,6 +105,17 @@
                     size="small"
                     plain
                     @click="addCollected(item)"
+                  />
+                </view>
+                <!-- 查看详情 -->
+                <view v-if="message.type === '企查拓客'" class="mt-8">
+                  <u-button 
+                    type="primary" 
+                    text="查看详情"
+                    shape="circle"
+                    size="small"
+                    plain
+                    @click="toCompanyDetail(item)"
                   />
                 </view>
               </view>
@@ -171,12 +183,16 @@
 </template>
 
 <script>
+import { throttle } from 'lodash'
+
 export default {
   onLoad(options) {
+    this.pageType = options.type
     this.getDetail(options.id)
   },
   data() {
     return {
+      pageType: '',
       showLoading: true,
       multiple: false,
       message: {
@@ -247,52 +263,63 @@ export default {
     // 打电话
     call(phoneNum) {
       uni.makePhoneCall({
-        phoneNumber: phoneNum //仅为示例
+        phoneNumber: phoneNum
       })
     },
-    // 收藏
-    // changeCollected({collected, name, phone, address}) {
-    //   if(!collected) this.addCollected({name, phone, address})
-    //   if(collected) this.cancelCollected({name, phone, address})
-    // },
     // 添加收藏
-    async addCollected({name, phone, address}) {
-      const res = await this.$api({ method: 'POST', url: '/user/addCollect', data: {name, phone, address} })
-      uni.$u.toast(res.data.msg)
-      // if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
-      // if(res.data.code === 20000) this.getDetail(this.message.id)
-    },
-    // 导入通讯录
-    addPhoneContact() {
-      // if(this.checkedList.length === 0) {
-      //   uni.showToast({
-      //     icon:'none',
-      //     title: '至少选择一条数据'
-      //   })
-      //   return
-      // }
-      uni.showLoading({ title: '导入中' })
-      let that = this
-      this.checkedList.forEach((item, index) => {
-        uni.addPhoneContact({
-          nickName: '',
-          lastName: `A-${that.message.type === '企查拓客' ? item.companyName : item.name}`,
-          firstName: '@云畅搜',
-          remark: '',
-          mobilePhoneNumber: item.phone,
-          weChatNumber: '',
-          success: function () {
-            if(index === this.checkedList.length - 1) {
-              uni.hideLoading()
-              uni.showToast({
-                title: '导入成功',
-              })
-            }
-          },
-          fail: function () {
-            console.log('fail');
-          }
+    addCollected: throttle(
+      async function(item) {
+        const res = await this.$api({ 
+          method: 'POST', 
+          url: '/user/addCollect', 
+          data: {
+            name: item.name, 
+            phone: item.phone, 
+            address: item.address
+          } 
         })
+        uni.$u.toast(res.data.msg)
+      }, 500, {
+        leading: true,
+        trailing: false
+      }
+    ),
+    // 导入通讯录
+    addPhoneContact: throttle(
+      function() {
+        uni.showLoading({ title: '导入中' })
+        let that = this
+        this.checkedList.forEach((item, index) => {
+          uni.addPhoneContact({
+            nickName: '',
+            lastName: `A-${that.message.type === '企查拓客' ? item.companyName : item.name}`,
+            firstName: '@云畅搜',
+            remark: '',
+            mobilePhoneNumber: item.phone,
+            weChatNumber: '',
+            success: function () {
+              if(index === this.checkedList.length - 1) {
+                uni.hideLoading()
+                uni.showToast({
+                  title: '导入成功',
+                })
+              }
+            },
+            fail: function () {
+              console.log('fail');
+            }
+          })
+        })
+      }, 500, {
+        leading: true,
+        trailing: false
+      }
+    ),
+    // 企查详情
+    toCompanyDetail(data) {
+      uni.setStorage({ key: 'companyDetail', data: data })
+      uni.navigateTo({
+         url: '/pages/company/detail'
       })
     }
   },

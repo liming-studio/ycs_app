@@ -9,8 +9,8 @@
           </view>
           <view class="grow w-full mr-12">
             <view class="text-white">
-              <view class="text-sm">{{ userInfo.name }}</view>
-              <view class="mt-2 text-xs opacity-90">您还未开通VIP会员</view>
+              <view class="text-base">{{ userInfo.name }}</view>
+              <view class="mt-2 text-xs opacity-90">{{ userInfo.isvip === 1 ? `您的会员将于 ${userInfo.buytime} 到期` : '您还未开通会员' }}</view>
             </view>
           </view>
         </view>
@@ -67,7 +67,7 @@
             text="立即开通" 
             type="primary" 
             shape="circle"
-            @click="toPay"
+            @click="toPay(vipList[vipActive].id)"
           />
         </view>
       </view>
@@ -76,6 +76,8 @@
 </template>
 
 <script>
+import { throttle } from 'lodash'
+
 export default {
   data() {
     return {
@@ -84,14 +86,15 @@ export default {
         name: '',
         thumbnail: '',
         mobile: '',
-        isvip: 0
+        isvip: 0,
+        buytime: ''
       },
       vipActive: 0,
       vipList: [],
       payActive: '支付宝',
       payList: [
         { icon: 'zhifubao-circle-fill', iconColor: '#027aff', label: '支付宝' },
-        { icon: 'weixin-circle-fill', iconColor: '#04BE02', label: '微信支付' }
+        // { icon: 'weixin-circle-fill', iconColor: '#04BE02', label: '微信支付' }
       ]
     }
   },
@@ -115,30 +118,37 @@ export default {
         this.showLoading = false
       })
     },
-    async toPay() {
-      const res = await this.$api({ url: '/user/aliPay' })
-      if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
-      if(res.data.code === 20000) {
-        uni.requestPayment({
-          provider: 'alipay',
-          orderInfo: res.data.data.resdata, //支付宝订单数据
-          success: function (res) {
-            uni.showModal({
-              content: '您成功了，你是vip了',  
-              showCancel: false  
-            })
-              console.log('success:' + JSON.stringify(res))
-          },
-          fail: function (err) {
-            uni.showModal({
-              content: '你是胆小鬼',  
-              showCancel: false  
-            })
+    toPay: throttle(
+      async function(id) {
+        const res = await this.$api({ url: '/user/aliPay', data: {id: id} })
+        if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
+        if(res.data.code === 20000) {
+          uni.requestPayment({
+            provider: 'alipay',
+            orderInfo: res.data.data.resdata, //支付宝订单数据
+            success: function (res) {
+              uni.showModal({
+                content: '您成功了，你是vip了',  
+                showCancel: false,
+                success: () => {
+                  uni.reLaunch({ url: '/pages/user/index' })
+                }
+              })
+            },
+            fail: function (err) {
+              uni.showModal({
+                content: '你是胆小鬼',  
+                showCancel: false  
+              })
               console.log('fail:' + JSON.stringify(err))
-          }
-        })
+            }
+          })
+        }
+      }, 500, {
+        leading: true,
+        trailing: false
       }
-    }
+    )
   }
 }
 </script>

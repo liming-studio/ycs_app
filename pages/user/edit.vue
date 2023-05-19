@@ -30,6 +30,7 @@
           <u-input 
             v-model="form.name" 
             border="none" 
+            :maxlength="8"
             placeholder="请填写用户名"
             clearable
           />
