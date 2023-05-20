@@ -26,7 +26,18 @@
         </view>
       </view>
       <view 
-        v-if="message.num > 0"
+        v-if="message.num === 0"
+        class="flex-center" 
+      >
+        <u-empty
+          mode="car"
+          icon="http://cdn.uviewui.com/uview/empty/list.png"
+          text="列表为空"
+          style="height: 70vh" 
+        />
+      </view>
+      <view 
+        v-else
         :class="multiple ? 'pb-48' : 'pb-4'"
       >
         <view class="p-10">
@@ -55,7 +66,12 @@
                       size="13"
                     />
                   </view>
-                  <view class="ml-4 text-lg" style="margin-top: -4px;">{{ message.type === '企查拓客' ? item.companyName : item.name }}</view>
+                  <view 
+                    class="ml-4 text-lg" 
+                    style="margin-top: -4px"
+                  >
+                    {{ message.type === '企查拓客' ? item.companyName : item.name }}
+                  </view>
                 </view>
                 <view 
                   v-if="item.phone" 
@@ -166,17 +182,6 @@
             </view>
           </view>
         </view>
-      </view>
-      <view 
-        v-else 
-        class="flex-center" 
-      >
-        <u-empty
-          mode="car"
-          icon="http://cdn.uviewui.com/uview/empty/list.png"
-          text="列表为空"
-          style="height: 70vh" 
-        />
       </view>
     </view>
   </view>
@@ -298,7 +303,8 @@ export default {
             mobilePhoneNumber: item.phone,
             weChatNumber: '',
             success: function () {
-              if(index === this.checkedList.length - 1) {
+              if(index === that.checkedList.length - 1) {
+                that.multiple = false
                 uni.hideLoading()
                 uni.showToast({
                   title: '导入成功',
@@ -306,6 +312,7 @@ export default {
               }
             },
             fail: function () {
+              uni.hideLoading()
               console.log('fail');
             }
           })

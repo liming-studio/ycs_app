@@ -1,6 +1,6 @@
-// const BASE_URL = 'https://www.jnysqc.com'
+const BASE_URL = 'https://www.jnysqc.com'
 // const BASE_URL = 'https://192.168.1.149'
-const BASE_URL = 'https://192.168.50.81'
+// const BASE_URL = 'https://192.168.50.81'
 
 export const api = (options) => {
  	return new Promise((resolve, reject) => {
@@ -26,6 +26,7 @@ export const api = (options) => {
 						icon: 'fail',
 						showCancel: false,
 						success: () => {
+							uni.removeStorage({ key: 'token' })
 							uni.reLaunch({
 								url: '/pages/login/index'
 							})
@@ -56,12 +57,13 @@ export const upload = (options) => {
 				reject(err)
 			},
 			complete: (complete) => {
-				if(complete.statusCode === 401) {
+				if(complete.statusCode === 401 && uni.getStorageSync("token")) {
 					uni.reLaunch({
 						title: '登录时效已过期，请重新登录',
 						icon: 'fail',
 						showCancel: false,
 						success: () => {
+							uni.removeStorage({ key: 'token' })
 							uni.navigateTo({
 								url: '/pages/login/index'
 							})
