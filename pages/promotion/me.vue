@@ -12,14 +12,13 @@
       ref="paginationRef" 
       url="/tuiguang/getMyPage"
       :show-divider="false"
-      ask
     >
       <template v-slot="{list}">
         <view class="px-12">
           <navigator 
             v-for="(item, index) in list"
             :key="index"
-            :url="'/pages/promotion/detail?id='+item.id" 
+            :url="'/pages/promotion/detail?id='+item.id"
             hover-class="none"
           >
             <view class="w-full h-136 bg-white rounded-xs px-12 mt-12">
@@ -81,7 +80,7 @@ export default {
   },
   data() {
     return {
-      init: false,
+      // init: false,
       screenHeight: '',
     }
   },
@@ -89,11 +88,14 @@ export default {
     this.screenHeight = uni.getSystemInfoSync().windowHeight
   },
   onShow() {
-    if(this.init) {
-      this.init = false
-      uni.pageScrollTo({scrollTop: 0, duration: 0 })
+    this.$nextTick(() => {
       this.$refs.paginationRef.askApi(false)
-    }
+    })
+    // if(this.init) {
+    //   this.init = false
+    //   uni.pageScrollTo({scrollTop: 0, duration: 0 })
+    //   this.$refs.paginationRef.askApi(false)
+    // }
   },
   onReachBottom() {
     this.$refs.paginationRef.addPage()

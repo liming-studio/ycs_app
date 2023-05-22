@@ -3,6 +3,7 @@
     <u-navbar title="我的收藏" autoBack>
 			<view slot="right">
 				<u-button
+          v-if="list.length > 0"
           :text="multiple ? '取消' : '批量操作'"
           shape="circle"
           size="small"

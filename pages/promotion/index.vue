@@ -130,7 +130,6 @@
 				url="/tuiguang/getMyPage"
 				:show-divider="false"
 				show-page-loading
-				ask
 			>
 				<template v-slot:loading>
 					<view class="w-full h-400 flex-center flex-col">
@@ -214,7 +213,7 @@
 		},
 		data() {
 			return {
-				init: false,
+				// init: false,
 				params: {
 					industryid: null
 				},
@@ -237,13 +236,16 @@
 			this.getTabs()
 		},
 		onShow() {
-			if(this.init) {
-				uni.showLoading({ title: '数据更新中……' })
-				this.init = false
-				uni.pageScrollTo({scrollTop: 0, duration: 0 })
+			this.$nextTick(() => {
 				this.$refs.paginationRef.askApi(false)
-				this.$nextTick(() => uni.hideLoading())
-			}
+			})
+			// if(this.init) {
+			// 	uni.showLoading({ title: '数据更新中……' })
+			// 	this.init = false
+			// 	uni.pageScrollTo({scrollTop: 0, duration: 0 })
+			// 	this.$refs.paginationRef.askApi(false)
+			// 	this.$nextTick(() => uni.hideLoading())
+			// }
 		},
 		methods: {
 			// 搜索

@@ -172,8 +172,9 @@
         },
         rules: {
           'thumbnail': {
-            type: 'array',
-            required: true,
+            validator: (rule, value, callback) => {
+              return uni.$u.test.array(value) && value.length > 0
+            },
             message: '请上传头像',
             trigger: ['blur', 'change']
           },
@@ -183,12 +184,21 @@
             message: '请输入姓名',
             trigger: ['blur', 'change']
           },
-          'mobile': {
-            type: 'string',
-            required: true,
-            message: '请输入对外联系号码',
-            trigger: ['blur', 'change']
-          },
+          'mobile': [
+            {
+              required: true, 
+              message: '请输入手机号',
+              trigger: ['change','blur'],
+            },
+            {
+              // 自定义验证函数，见上说明
+              validator: (rule, value, callback) => {
+                return uni.$u.test.mobile(value)
+              },
+              message: '手机号码不正确',
+              trigger: ['change','blur'],
+            }
+          ],
           'companyname': {
             type: 'string',
             required: true,

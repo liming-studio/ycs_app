@@ -101,7 +101,9 @@
 </template>
 
 <script>
+import { throttle } from 'lodash'
 import { isNonEmptyArray } from '@/utils/tool.js'
+
 export default {
   data() {
     return {
@@ -236,9 +238,8 @@ export default {
       this.$nextTick(() => this.btnDisabled = false)
     },
     // 提交
-    submit() {
-			this.$refs.uForm.validate().then(res => {
-        this.btnDisabled = true
+    submit: throttle(function() {
+      this.$refs.uForm.validate().then(res => {
         uni.showLoading({ title: '上传中' })
         this.edit({
           id: this.form.id,
@@ -254,18 +255,16 @@ export default {
         uni.hideLoading()
 				uni.$u.toast('填写信息不完整')
 			})
-		},
+    }, 500, {
+      leading: true, 
+      trailing: false
+    }),
     async edit(data) {
-      let pages = getCurrentPages()
-      let prePage = pages[pages.length - 2]
       const res = await this.$api({ url: '/tuiguang/update', data: data })
+      uni.hideLoading()
       uni.$u.toast(res.data.msg)
       if(res.data.code === 20000) {
-        prePage.init = true
         this.$nextTick(() => {
-          uni.hideLoading()
-          this.btnDisabled = false
-          uni.$u.toast('修改成功')
           uni.navigateBack({ delta: 1 })
         })
       }

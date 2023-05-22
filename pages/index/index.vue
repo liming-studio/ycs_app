@@ -171,7 +171,6 @@
 						ref="paginationRef" 
 						url="/open/tuiguang/getPage" 
 						:params="params"
-						ask
 					>
 						<template v-slot="{list}">
 							<navigator 
@@ -282,6 +281,9 @@
 		},
 		onShow() {
 			this.getUserInfo()
+			this.$nextTick(() => {
+				this.$refs.paginationRef.askApi(false)
+			})
 		},
 		methods: {
 			async getUserInfo() {

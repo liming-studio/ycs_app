@@ -10,7 +10,7 @@
           <view class="grow w-full mr-12">
             <view class="text-white">
               <view class="text-base">{{ userInfo.name }}</view>
-              <view class="mt-2 text-xs opacity-90">{{ userInfo.isvip === 1 ? `您的会员将于 ${userInfo.buytime} 到期` : '您还未开通会员' }}</view>
+              <view class="mt-2 text-xs opacity-90">{{ userInfo.isvip === 1 ? `您的会员将于 ${userInfo.outdatetime} 到期` : '您还未开通会员' }}</view>
             </view>
           </view>
         </view>

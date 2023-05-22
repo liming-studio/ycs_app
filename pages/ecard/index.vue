@@ -94,7 +94,7 @@
   export default {
     data() {
       return {
-        init: false,
+        // init: false,
         showLoading: true,
         showEmpty: false,
         screenHeight: '',
@@ -114,16 +114,18 @@
       }
     },
     onLoad() {
-      this.getCardDetail()
+      // this.getCardDetail()
       this.screenHeight = uni.getSystemInfoSync().windowHeight
     },
     onShow() {
-			if(this.init) {
-        this.showLoading = true
-				this.init = false
-				uni.pageScrollTo({scrollTop: 0, duration: 0 })
-				this.getCardDetail()
-			}
+      this.showLoading = true
+      this.getCardDetail()
+			// if(this.init) {
+      //   this.showLoading = true
+			// 	this.init = false
+			// 	uni.pageScrollTo({scrollTop: 0, duration: 0 })
+			// 	this.getCardDetail()
+			// }
 		},
     methods: {
       back() {

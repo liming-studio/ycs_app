@@ -84,10 +84,13 @@
 
 <script>
   import { throttle } from 'lodash'
+  import Gps from '@/uni_modules/json-gps/js_sdk/gps.js';
+  const gps = new Gps()
+
   export default {
     data() {
       return {
-        showLoading: true,
+        showLoading: false,
         params: {
           content: '',
           latitude: '',
@@ -97,8 +100,17 @@
         showDefault: true
       }
     },
-    onLoad() {
-      this.getPosition()
+    async onShow() {
+      uni.showLoading({title:"获取定位中"})
+      // #ifdef APP-PLUS
+      let location = await gps.getLocation()
+      if(location){
+        this.params.latitude = location.latitude + ''
+        this.params.longitude = location.longitude + ''
+      }
+      // #endif
+      uni.hideLoading()
+      this.openGPS()
     },
     methods: {
       getPosition() {
@@ -110,6 +122,8 @@
             that.params.longitude = Math.abs(res.longitude)
             uni.setStorage({ key: 'pos', data: {lat: Math.abs(res.latitude), long: Math.abs(res.longitude)}})
           },
+          fail: () => {
+          },
           complete: function() {
             setTimeout(() => {
               that.showLoading = false
@@ -119,6 +133,10 @@
       },
       handleSearch: throttle(
         function(value) {
+          if(!this.params.latitude || !this.params.longitude) {
+            this.openGPS()
+            return
+          }
           uni.showLoading({ title: '采集中' })
           this.toSearch(value)
         }, 1500, {
@@ -126,6 +144,67 @@
           trailing: false
         }
       ),
+      openGPS() {
+        // 定位开启状态 true=开启，false=未开启
+        let bool = false
+        
+        // android平台
+        if (uni.getSystemInfoSync().platform == 'android') {
+          var context = plus.android.importClass("android.content.Context")
+          var locationManager = plus.android.importClass("android.location.LocationManager")
+          var main = plus.android.runtimeMainActivity();
+          var mainSvr = main.getSystemService(context.LOCATION_SERVICE)
+          bool = mainSvr.isProviderEnabled(locationManager.GPS_PROVIDER)
+        }
+        
+        // ios平台
+        if (uni.getSystemInfoSync().platform == 'ios') {
+          var cllocationManger = plus.ios.import("CLLocationManager");
+          var enable = cllocationManger.locationServicesEnabled();
+          var status = cllocationManger.authorizationStatus();
+          plus.ios.deleteObject(cllocationManger);
+          bool = enable && status != 2
+        }
+        
+        // 未开启定位功能
+        if (bool === false) {
+          uni.showModal({
+            title: '提示',
+            content: '请打开定位服务',
+            success: ({
+              confirm,
+              cancel
+            }) => {
+              if (confirm) {
+                // android平台
+                if (uni.getSystemInfoSync().platform == 'android') {
+                  var Intent = plus.android.importClass('android.content.Intent');
+                  var Settings = plus.android.importClass('android.provider.Settings');
+                  var intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                  var main = plus.android.runtimeMainActivity();
+                  main.startActivity(intent); // 打开系统设置GPS服务页面
+                }
+        
+                // ios平台
+                if (uni.getSystemInfoSync().platform == 'ios') {
+                  var UIApplication = plus.ios.import("UIApplication");
+                  var application2 = UIApplication.sharedApplication();
+                  var NSURL2 = plus.ios.import("NSURL");
+                  var setting2 = NSURL2.URLWithString("App-Prefs:root=Privacy&path=LOCATION");
+                  application2.openURL(setting2);
+                  plus.ios.deleteObject(setting2);
+                  plus.ios.deleteObject(NSURL2);
+                  plus.ios.deleteObject(application2);
+                }
+              }
+              // 用户取消前往开启定位服务
+              if (cancel) {
+                // do sth...
+              }
+            }
+          });
+        }
+      },
       async toSearch(value) {
         const res = await this.$api({ url: '/map/getNearByList',  data: this.params })
         if(res.data.code !== 20000) {

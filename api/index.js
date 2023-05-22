@@ -26,9 +26,13 @@ export const api = (options) => {
 						icon: 'fail',
 						showCancel: false,
 						success: () => {
-							uni.removeStorage({ key: 'token' })
-							uni.reLaunch({
-								url: '/pages/login/index'
+							uni.removeStorage({ 
+								key: 'token',
+								success: function () {
+									uni.reLaunch({
+										url: '/pages/login/index'
+									})
+								}
 							})
 						}
 					})

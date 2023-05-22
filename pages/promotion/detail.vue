@@ -125,12 +125,16 @@
       this.getDetail(options.id)
     },
     onShow() {
-			if(this.init) {
+      if(this.message.id) {
         this.showLoading = true
-				this.init = false
-				uni.pageScrollTo({scrollTop: 0, duration: 0 })
-				this.getDetail(this.message.id)
-			}
+        this.getDetail(this.message.id)
+      }
+			// if(this.init) {
+      //   this.showLoading = true
+			// 	this.init = false
+			// 	uni.pageScrollTo({scrollTop: 0, duration: 0 })
+			// 	this.getDetail(this.message.id)
+			// }
 		},
     methods: {
       async getDetail(id) {
@@ -160,13 +164,13 @@
         }
       },
       async remove(id) {
-        let pages = getCurrentPages()
-        let prePage = pages[pages.length - 2]
+        // let pages = getCurrentPages()
+        // let prePage = pages[pages.length - 2]
 				const res = await this.$api({ url: `/tuiguang/delete?id=${id}`})
 				if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
 				if(res.data.code === 20000) {
 					uni.$u.toast(res.data.msg)
-          prePage.init = true
+          // prePage.init = true
           this.$nextTick(() => {
             uni.navigateBack({ delta: 1 })
           })

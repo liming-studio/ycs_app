@@ -124,7 +124,14 @@
         </u-form-item>
       </u-form>
       <view class="mt-48">
-        <u-button type="primary" shape="circle"  @click="submit">提交</u-button>
+        <u-button 
+          type="primary" 
+          shape="circle" 
+          :disabled="btnDisabled"
+          @click="submit"
+        >
+          提交
+        </u-button>
       </view>
       <u-picker 
         :show="industry.show" 
@@ -138,139 +145,181 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        showLoading: true,
-        fileList1: [],    // 头像
-        fileList2: [],
-        industry: {
-          show: false,
-          list: [],
-          selText: ''
+import { throttle } from 'lodash'
+
+export default {
+  data() {
+    return {
+      showLoading: true,
+      btnDisabled: false,
+      fileList1: [],    // 头像
+      fileList2: [],
+      industry: {
+        show: false,
+        list: [],
+        selText: ''
+      },
+      form: {
+        thumbnail: [],        // 头像
+        name: '',             // 姓名
+        mobile: '',           // 对外联系号码
+        wechatcode: '',       // 微信号
+        position: '',         // 职位
+        companyaddress: '',   // 公司地址
+        companycontent: '',   // 公司简介
+        companyname: '',      // 公司名称
+        industryid: '',       // 主营业务
+        wechat: [],           // 上传微信二维码
+      },
+      rules: {
+        'thumbnail': {
+          validator: (rule, value, callback) => {
+            return uni.$u.test.array(value) && value.length > 0
+          },
+          message: '请上传头像',
+          trigger: ['blur', 'change']
         },
-        form: {
-          thumbnail: [],        // 头像
-          name: '',             // 姓名
-          mobile: '',           // 对外联系号码
-          wechatcode: '',       // 微信号
-          position: '',         // 职位
-          companyaddress: '',   // 公司地址
-          companycontent: '',   // 公司简介
-          companyname: '',      // 公司名称
-          industryid: '',       // 主营业务
-          wechat: [],           // 上传微信二维码
+        'name': {
+          type: 'string',
+          required: true,
+          message: '请输入您的姓名',
+          trigger: ['blur', 'change']
         },
-        rules: {
-          'name': {
-            type: 'string',
-            required: true,
-            message: '请输入您的姓名',
-            trigger: ['blur', 'change']
+        'mobile': [
+          {
+            required: true, 
+            message: '请输入手机号',
+            trigger: ['change','blur'],
           },
-          'mobile': {
-            type: 'string',
-            required: true,
-            message: '请输入您的对外联系号码',
-            trigger: ['blur', 'change']
-          },
-          'companyname': {
-            type: 'string',
-            required: true,
-            message: '请输入公司名称',
-            trigger: ['blur', 'change']
-          },
-          'industryid': {
-            type: 'number',
-            required: true,
-            message: '请选择公司主营业务',
-            trigger: ['blur', 'change']
+          {
+            // 自定义验证函数，见上说明
+            validator: (rule, value, callback) => {
+              return uni.$u.test.mobile(value)
+            },
+            message: '手机号码不正确',
+            trigger: ['change','blur'],
           }
+        ],
+        'companyname': {
+          type: 'string',
+          required: true,
+          message: '请输入公司名称',
+          trigger: ['blur', 'change']
+        },
+        'industryid': {
+          type: 'number',
+          required: true,
+          message: '请选择公司主营业务',
+          trigger: ['blur', 'change']
+        },
+        'companyaddress': {
+          type: 'string',
+          required: true,
+          message: '请输入公司地址',
+          trigger: ['blur', 'change']
         }
       }
+    }
+  },
+  onLoad(options) {
+    this.getIndustryList()
+  },
+  methods: {
+    // 获取所有行业
+    async getIndustryList() {
+      const res = await this.$api({ url: '/open/industry/getList'})
+      if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
+      if(res.data.code === 20000) this.industry.list = [res.data.data]
+      this.$nextTick(() => this.showLoading = false)
+      // setTimeout(() => this.showLoading = false, 100)
     },
-    onLoad(options) {
-      this.getIndustryList()
+    // 选择行业
+    confirmIndustry({value}) {
+      this.industry.selText = value[0].name
+      this.form.industryid = value[0].id
+      this.industry.show = false
+      this.$refs.uForm.validateField('industryid')
     },
-    methods: {
-      // 获取所有行业
-      async getIndustryList() {
-        const res = await this.$api({ url: '/open/industry/getList'})
-        if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
-        if(res.data.code === 20000) this.industry.list = [res.data.data]
-        this.$nextTick(() => this.showLoading = false)
-        // setTimeout(() => this.showLoading = false, 100)
-      },
-      // 选择行业
-      confirmIndustry({value}) {
-        this.industry.selText = value[0].name
-        this.form.industryid = value[0].id
-        this.industry.show = false
-      },
-      // 删除图片
-      deletePic(event) {
-        console.log(event)
-        this[`fileList${event.name}`].splice(event.index, 1)
-        if(event.name === '1') this.form.thumbnail.splice(event.index, 1)
-        if(event.name === '2') this.form.wechat.splice(event.index, 1)
-      },
-      // 选择图片
-      afterRead(event) {
-        let lists = [].concat(event.file)
-        let fileListLen = this[`fileList${event.name}`].length
-        lists.map((item) => {
-          this[`fileList${event.name}`].push({
-            ...item,
-            status: 'uploading',
-            message: '上传中'
-          })
+    // 删除图片
+    deletePic(event) {
+      console.log(event)
+      this[`fileList${event.name}`].splice(event.index, 1)
+      if(event.name === '1') this.form.thumbnail.splice(event.index, 1)
+      if(event.name === '2') this.form.wechat.splice(event.index, 1)
+    },
+    // 选择图片
+    afterRead(event) {
+      let lists = [].concat(event.file)
+      let fileListLen = this[`fileList${event.name}`].length
+      lists.map((item) => {
+        this[`fileList${event.name}`].push({
+          ...item,
+          status: 'uploading',
+          message: '上传中'
         })
-        for (let i = 0; i < lists.length; i++) {
-          const result = this.uploadFilePromise(lists[i].url, event.name)
-          let item = this[`fileList${event.name}`][fileListLen]
-          this[`fileList${event.name}`].splice(fileListLen, 1, Object.assign(item, {
-            status: 'success',
-            message: '',
-            url: result
-          }))
-          fileListLen++
-        }
-      },
-      async uploadFilePromise(path, name) {
-        const res = await this.$upload({url: '/open/addpic', filePath: path})
-        let data = JSON.parse(res.data)
-        if(data.code !== 20000) uni.$u.toast(data.msg)
-        if(data.code === 20000) {
-          if(name === '1') this.form.thumbnail.push(data.data)
-          if(name === '2') this.form.wechat.push(data.data)
-        }
-      },
-      // 提交
-      submit() {
-        this.$refs.uForm.validate().then(res => {
-          this.add({            
-            thumbnail: JSON.stringify(this.form.thumbnail),      
-            name:  this.form.name,           
-            mobile: this.form.mobile,          
-            wechatcode: this.form.wechatcode,      
-            position: this.form.position,       
-            companyaddress: this.form.companyaddress,
-            companycontent: this.form.companycontent,
-            companyname: this.form.companyname,    
-            industryid: this.form.industryid,   
-            wechat: JSON.stringify(this.form.wechat),     
-          })
-        }).catch(errors => {
-          uni.$u.toast('填写信息不完整')
-        })
-      },
-      async add(data) {
-        const res = await this.$api({ method: 'POST', url: '/card/updateCard', data: data })
-        uni.$u.toast(res.data.msg)
-        uni.reLaunch({
-          url: '/pages/ecard/index'
-        })
+      })
+      for (let i = 0; i < lists.length; i++) {
+        const result = this.uploadFilePromise(lists[i].url, event.name)
+        let item = this[`fileList${event.name}`][fileListLen]
+        this[`fileList${event.name}`].splice(fileListLen, 1, Object.assign(item, {
+          status: 'success',
+          message: '',
+          url: result
+        }))
+        fileListLen++
       }
     },
-  }
+    async uploadFilePromise(path, name) {
+      this.btnDisabled = true
+      const res = await this.$upload({url: '/open/addpic', filePath: path})
+      let data = JSON.parse(res.data)
+      if(data.code !== 20000) uni.$u.toast(data.msg)
+      if(data.code === 20000) {
+        if(name === '1') this.form.thumbnail.push(data.data)
+        if(name === '2') this.form.wechat.push(data.data)
+      }
+      this.$nextTick(() => {
+        this.$refs.uForm.validateField('images')
+        this.btnDisabled = false
+      })
+    },
+    // 提交
+    submit: throttle(function() {
+      this.$refs.uForm.validate().then(res => {
+        uni.showLoading({ title: '上传中' })
+        this.add({            
+          thumbnail: JSON.stringify(this.form.thumbnail),      
+          name:  this.form.name,           
+          mobile: this.form.mobile,          
+          wechatcode: this.form.wechatcode,      
+          position: this.form.position,       
+          companyaddress: this.form.companyaddress,
+          companycontent: this.form.companycontent,
+          companyname: this.form.companyname,    
+          industryid: this.form.industryid,   
+          wechat: JSON.stringify(this.form.wechat),     
+        })
+      }).catch(errors => {
+        uni.hideLoading()
+        uni.$u.toast('填写信息不完整')
+      })
+    }, 500, {
+      leading: true, 
+      trailing: false
+    }),
+    async add(data) {
+      const res = await this.$api({ method: 'POST', url: '/card/updateCard', data: data })
+      uni.hideLoading()
+      uni.$u.toast(res.data.msg)
+      if(res.data.code === 20000) {
+        uni.$u.toast('上传成功')
+        this.$nextTick(() => {
+          uni.reLaunch({
+            url: '/pages/ecard/index'
+          })
+        }) 
+      }
+    }
+  },
+}
 </script>

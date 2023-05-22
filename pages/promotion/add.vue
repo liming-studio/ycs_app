@@ -27,6 +27,7 @@
             type="number"
             border="none" 
             placeholder="请输入您的联系方式"
+            maxlength="11"
             clearable
           />
         </u-form-item>
@@ -35,7 +36,8 @@
           <u-input 
             v-model="form.title" 
             border="none" 
-            placeholder="请输入推广标题"
+            placeholder="请输入推广标题(最多20个字)"
+            maxlength="20"
             clearable
           />
         </u-form-item>
@@ -101,6 +103,8 @@
 </template>
 
 <script>
+import { throttle } from 'lodash'
+
 export default {
   data() {
     return {
@@ -128,12 +132,21 @@ export default {
 					message: '请填写公司名称',
           trigger: ['blur', 'change']
         },
-        'contact': {
-          type: 'string',
-          required: true,
-          message: '请填写联系方式',
-          trigger: ['blur', 'change']
-        },
+        'contact': [
+          {
+            required: true, 
+            message: '请输入手机号',
+            trigger: ['change','blur'],
+          },
+          {
+            // 自定义验证函数，见上说明
+            validator: (rule, value, callback) => {
+              return uni.$u.test.mobile(value);
+            },
+            message: '手机号码不正确',
+            trigger: ['change','blur'],
+          }
+        ],
         'title': {
           type: 'string',
           required: true,
@@ -153,8 +166,9 @@ export default {
           trigger: ['blur', 'change']
         },
         'images': {
-          type: 'array',
-          required: true,
+          validator: (rule, value, callback) => {
+            return uni.$u.test.array(value) && value.length > 0
+          },
           message: '至少上传一张图片',
           trigger: ['blur', 'change']
         }
@@ -178,6 +192,7 @@ export default {
       this.industry.selText = value[0].name
       this.form.industryid = value[0].id
       this.industry.show = false
+      this.$refs.uForm.validateField('industryid')
     },
     // 删除图片
     deletePic(event) {
@@ -206,8 +221,6 @@ export default {
         }))
         fileListLen++
       }
-      this.$nextTick(() => this.btnDisabled = false)
-      // setTimeout(() => this.btnDisabled = false, 300)
     },
     async uploadFilePromise(path) {
       this.btnDisabled = true
@@ -215,12 +228,14 @@ export default {
       let data = JSON.parse(res.data)
       if(data.code !== 20000) uni.$u.toast(data.msg)
       if(data.code === 20000) this.form.images.push(data.data)
-      this.$nextTick(() => this.btnDisabled = false)
+      this.$nextTick(() => {
+        this.$refs.uForm.validateField('images')
+        this.btnDisabled = false
+      })
     },
     // 提交
-    submit() {
-			this.$refs.uForm.validate().then(res => {
-        this.btnDisabled = true
+    submit: throttle(function() {
+      this.$refs.uForm.validate().then(res => {
         uni.showLoading({ title: '上传中' })
         this.add({
           companyname: this.form.companyname,
@@ -235,18 +250,16 @@ export default {
         uni.hideLoading()
 				uni.$u.toast('填写信息不完整')
 			})
-		},
+    }, 500, {
+      leading: true, 
+      trailing: false
+    }),
     async add(data) {
-      let pages = getCurrentPages()
-      let prePage = pages[pages.length - 2]
       const res = await this.$api({ url: '/tuiguang/add', data: data })
+      uni.hideLoading()
       uni.$u.toast(res.data.msg)
       if(res.data.code === 20000) {
-        prePage.init = true
         this.$nextTick(() => {
-          uni.hideLoading()
-          this.btnDisabled = false
-          uni.$u.toast('上传成功')
           uni.navigateBack({ delta: 1 })
         })
       }
