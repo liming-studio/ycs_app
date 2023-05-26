@@ -277,6 +277,9 @@ export default {
 			this.headerOpacity = 1
 		}
 	},
+	onLoad(options) {
+		this.getUserInfo()
+	},
 	onShow() {
 		if(this.$refs.paging) {
 			this.$refs.paging.refresh()
