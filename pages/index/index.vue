@@ -167,15 +167,18 @@
 						<view class="w-4 h-14 rounded-lg bg-primary" />
 						<view class="ml-8 text-lg font-bold">热门推荐</view>
 					</view>
-					<base-pagination 
-						ref="paginationRef" 
-						url="/open/tuiguang/getPage" 
-						:params="params"
+					<z-paging 
+						ref="paging" 
+						v-model="hotList"
+						use-page-scroll
+						loading-more-default-as-loading
+						@query="queryList"
 					>
-						<template v-slot="{list}">
-							<navigator 
-								v-for="(item, index) in list" 
-								:key="index"
+            <view 
+							v-for="(item,index) in hotList" 
+							:key="index"
+						>
+							<navigator
 								:url="'/pages/promotion/detail?id='+item.id" 
 								hover-class="none"
 							>
@@ -216,8 +219,8 @@
 									</view>
 								</view>
 							</navigator>
-						</template>
-					</base-pagination>
+            </view>
+        	</z-paging>
 				</view>
 				<!-- 返回顶部 -->
 				<u-back-top 
@@ -232,88 +235,90 @@
 </template>
 
 <script>
-	import BasePagination from '@/components/BasePagination.vue'
-	export default {
-		components: {
-			BasePagination
-		},
-		data() {
+import ZPMixin from '@/uni_modules/z-paging/components/z-paging/js/z-paging-mixin'
+
+export default {
+	mixins: [ZPMixin],
+	meta: {
+    keepAlive: false
+  },
+	data() {
+		return {
+			headerOpacity: 0, // 导航栏透明度变量
+			scrollTop: 0,
+			bannerList: [ 'https://cdn.uviewui.com/uview/swiper/swiper2.png', 'https://cdn.uviewui.com/uview/swiper/swiper3.png'],
+			userInfo: {
+				name: '',
+				thumbnail: '',
+				mobile: '',
+				isvip: 0
+			},
+			kingkongList: [],
+			params: {},
+			hotList: []
+		}
+	},
+	computed: {
+		headerStyle() {
 			return {
-				headerOpacity: 0, // 导航栏透明度变量
-				scrollTop: 0,
-				bannerList: [
-					'https://cdn.uviewui.com/uview/swiper/swiper2.png',
-					'https://cdn.uviewui.com/uview/swiper/swiper3.png',
-				],
-				userInfo: {
-					name: '',
-					thumbnail: '',
-					mobile: '',
-					isvip: 0
-				},
-				kingkongList: [],
-				params: {}
+				backgroundColor: `rgba(243,244,246,${this.headerOpacity})`
 			}
 		},
-		computed: {
-			headerStyle() {
-				return {
-					backgroundColor: `rgba(243,244,246,${this.headerOpacity})`
-				}
-			},
-			searchStyle() {
-				return {
-					opacity: this.headerOpacity
-				}
+		searchStyle() {
+			return {
+				opacity: this.headerOpacity
+			}
+		}
+	},
+	onPageScroll(e) {
+		this.scrollTop = e.scrollTop
+		this.headerOpacity = e.scrollTop / 100
+		if (this.headerOpacity > 1) {
+			this.headerOpacity = 1
+		}
+	},
+	onShow() {
+		if(this.$refs.paging) {
+			this.$refs.paging.refresh()
+		}
+	},
+	methods: {
+		async getUserInfo() {
+			const res = await this.$api({ url: '/user/getMyInfo' })
+			if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
+			if(res.data.code === 20000) Object.assign(this.userInfo, res.data.data)
+		},
+		async queryList(pageNo, pageSize) {
+			const res = await this.$api({ url: '/open/tuiguang/getPage', data: { currentPage: pageNo, size: pageSize }})
+			if(res.data.code === 20000) {
+				this.$refs.paging.completeByTotal(res.data.data.records, res.data.data.total)
+			} else {
+				this.$refs.paging.complete(false)
 			}
 		},
-		onPageScroll(e) {
-			this.scrollTop = e.scrollTop
-			this.headerOpacity = e.scrollTop / 100
-			if (this.headerOpacity > 1) {
-				this.headerOpacity = 1
-			}
-		},
-		onReachBottom() {
-			this.$refs.paginationRef.addPage()
-		},
-		onLoad() {
-		},
-		onShow() {
-			this.getUserInfo()
-			this.$nextTick(() => {
-				this.$refs.paginationRef.askApi(false)
-			})
-		},
-		methods: {
-			async getUserInfo() {
-				const res = await this.$api({ url: '/user/getMyInfo' })
-				if(res.data.code !== 20000) uni.$u.toast(res.data.msg)
-				if(res.data.code === 20000) Object.assign(this.userInfo, res.data.data)
-			},
-			navigateTo(url) {
-				if(!this.userInfo.isvip) {
-					uni.showModal({
-						title: '提示',
-						content: '抱歉，当前功能只针对VIP用户开放，请开通VIP后再试',
-						cancelText: '确定',
-						confirmText: '现在开通',
-						success: (res) => {
-							if(res.confirm) {
-								uni.navigateTo({
-									url: '/pages/vip/index'
-								})
-							}
+		navigateTo(url) {
+			if(!this.userInfo.isvip) {
+				uni.showModal({
+					title: '提示',
+					content: '抱歉，当前功能只针对VIP用户开放，请开通VIP后再试',
+					cancelText: '确定',
+					confirmText: '现在开通',
+					success: (res) => {
+						if(res.confirm) {
+							uni.navigateTo({
+								url: '/pages/vip/index'
+							})
 						}
-					})
-				} else {
-					uni.navigateTo({
-						url: url
-					})	
-				}
+					}
+				})
+			} else {
+				uni.navigateTo({
+					url: url
+				})	
 			}
 		}
 	}
+}
 </script>
 
 <style scoped>
@@ -327,7 +332,6 @@
 	margin-top: -1px;
 	background: rgb(243,244,246);
 	background: linear-gradient(180deg, rgba(60,156,255,1) 0%, rgba(60,156,255,0.6) 60%,  rgba(243,244,246,1) 100%)
-
 }
 .grid-text {
 	font-size: 14px;

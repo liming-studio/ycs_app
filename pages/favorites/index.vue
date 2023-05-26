@@ -205,17 +205,23 @@ export default {
     },
     // 全选
     checkedAllChange() {
+      uni.showLoading({ title: '操作中' })
       this.checkedAll = !this.checkedAll
       this.checkedList = this.checkedAll ? cloneDeep(this.list) : []
+      this.$nextTick(() => uni.hideLoading())
     },
     // 切换子选项
     changeSubChecked(item) {
-      if(!this.checkObjectInArray(this.checkedList, item).found) {
-        this.checkedList.push(item)
-        if(this.checkedList.length === this.list.length) this.checkedAll = true
-      } else {
-        this.checkedList.splice(this.checkObjectInArray(this.checkedList, item).index, 1)
-        this.checkedAll = false
+      if(this.multiple) {
+        uni.showLoading({ title: '操作中' })
+        if(!this.checkObjectInArray(this.checkedList, item).found) {
+          this.checkedList.push(item)
+          if(this.checkedList.length === this.list.length) this.checkedAll = true
+        } else {
+          this.checkedList.splice(this.checkObjectInArray(this.checkedList, item).index, 1)
+          this.checkedAll = false
+        }
+        this.$nextTick(() => uni.hideLoading())
       }
     },
     // 判断子选项状态
